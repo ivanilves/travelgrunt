@@ -1,0 +1,33 @@
+package directory
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+const (
+	fixturePath = "../../fixtures/directory"
+	invalidPath = "/c2RmZ3JlZ2ZncnR3Z3I0aGd3dGd3d3d3d3d3d2RmZGZmZnJlZmdydDRndnQ0M3RodWprbDhpb2s4"
+)
+
+func TestCollect(t *testing.T) {
+	assert := assert.New(t)
+
+	testCases := map[string]bool{
+		fixturePath: true,
+		invalidPath: false,
+	}
+
+	for path, expectedSuccess := range testCases {
+		entries, err := Collect(path)
+
+		if expectedSuccess {
+			assert.Greater(len(entries), 0)
+			assert.Nil(err)
+		} else {
+			assert.Equal(0, len(entries))
+			assert.NotNil(err)
+		}
+	}
+}

@@ -1,2 +1,3 @@
-# tgt
-Navigate Terragrunt directory tree with comfort!
+# ttg
+
+**T**ravel **T**erra**g**runt directory tree as a first class passenger!
