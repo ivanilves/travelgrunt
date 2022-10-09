@@ -14,5 +14,6 @@
 # Dependency directories
 vendor/
 
-# Compiled binary
-/ttg
+# Compiled binaries and assets
+/cmd/ttg/*
+!/cmd/ttg/*.go
