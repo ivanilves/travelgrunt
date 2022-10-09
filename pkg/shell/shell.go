@@ -9,6 +9,16 @@ import (
 
 const defaultShell = "bash"
 
+func detectShell() string {
+	shell := os.Getenv("SHELL")
+
+	if len(shell) != 0 {
+		return shell
+	}
+
+	return defaultShell
+}
+
 // Name returns a called binary name
 func Name() string {
 	return os.Args[0]
@@ -28,7 +38,7 @@ func Getppid() int {
 
 // Spawn creates a shell in the working directory of selected Terragrunt project
 func Spawn(path string) error {
-	cmd := exec.Command(defaultShell)
+	cmd := exec.Command(detectShell())
 
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin

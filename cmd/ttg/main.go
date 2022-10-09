@@ -24,9 +24,6 @@ func main() {
 	flag.Parse()
 
 	matches := flag.Args()
-	if len(matches) < 1 {
-		usage()
-	}
 
 	rootPath, err := scm.RootPath()
 
