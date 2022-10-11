@@ -51,3 +51,10 @@ func Spawn(path string) error {
 
 	return cmd.Run()
 }
+
+// PrintAndExit prints a string passed and exits after
+func PrintAndExit(s string) {
+	fmt.Printf("%s\n", s)
+
+	os.Exit(0)
+}

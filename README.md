@@ -26,3 +26,12 @@ experience, i.e. you will need to exit subshell before you "jump" to the next pr
 * `make dep` - install dependencies;
 * `make build` - build the `ttg` binary in `cmd/ttg` path;
 * `make install` - [optional] install built `ttg` binary under the `${PREFIX}/bin` location;
+
+## How to release a new version?
+
+:bulb: Set `GITHUB_TOKEN` environmental variable.
+
+* `make release` - create release artifacts;
+* `make next-version-tag` - tag your HEAD with the incremented version;
+* `git push --tags` - push your new tag to Git;
+* `make github` - create a GitHub release using your artifacts;

@@ -12,9 +12,13 @@ import (
 	"github.com/ivanilves/ttg/pkg/shell"
 )
 
+var appVersion = "default"
+
+var version bool
 var outFile string
 
 func init() {
+	flag.BoolVar(&version, "version", false, "print application version and exit")
 	flag.StringVar(&outFile, "outFile", "", "output project path into the file specified instead of spawning a shell")
 }
 
@@ -32,6 +36,10 @@ func main() {
 
 	flag.Usage = usage
 	flag.Parse()
+
+	if version {
+		shell.PrintAndExit(appVersion)
+	}
 
 	matches := flag.Args()
 
