@@ -17,3 +17,5 @@ vendor/
 # Compiled binaries and assets
 /cmd/ttg/*
 !/cmd/ttg/*.go
+/release/*
+!/release/.gitkeep
