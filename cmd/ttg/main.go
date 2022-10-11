@@ -5,14 +5,24 @@ import (
 	"log"
 
 	"github.com/ivanilves/ttg/pkg/directory"
+	"github.com/ivanilves/ttg/pkg/file"
 	"github.com/ivanilves/ttg/pkg/filter"
 	"github.com/ivanilves/ttg/pkg/menu"
 	"github.com/ivanilves/ttg/pkg/scm"
 	"github.com/ivanilves/ttg/pkg/shell"
 )
 
+var outFile string
+
+func init() {
+	flag.StringVar(&outFile, "outFile", "", "output project path into the file specified instead of spawning a shell")
+}
+
 func usage() {
-	log.Fatalf("Usage: %s <match> [<match2> ... <matchN>]\n", shell.Name())
+	println("Usage: " + shell.Name() + " [<match> <match2> ... <matchN>]")
+	println("")
+	println("Options:")
+	flag.PrintDefaults()
 }
 
 func main() {
@@ -45,6 +55,12 @@ func main() {
 
 	if err != nil {
 		log.Fatalf("failed to build menu: %s", err.Error())
+	}
+
+	if outFile != "" {
+		if err := file.WriteAndExit(outFile, entries[selected]); err != nil {
+			log.Fatalf("failed to write output file: %s", err.Error())
+		}
 	}
 
 	shell.Spawn(entries[selected])
