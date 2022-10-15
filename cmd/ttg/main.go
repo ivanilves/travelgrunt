@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
 
 	"github.com/ivanilves/ttg/pkg/directory"
 	"github.com/ivanilves/ttg/pkg/file"
@@ -10,6 +11,7 @@ import (
 	"github.com/ivanilves/ttg/pkg/menu"
 	"github.com/ivanilves/ttg/pkg/scm"
 	"github.com/ivanilves/ttg/pkg/shell"
+	"github.com/ivanilves/ttg/pkg/terminal"
 )
 
 var appVersion = "default"
@@ -38,7 +40,9 @@ func main() {
 	flag.Parse()
 
 	if version {
-		shell.PrintAndExit(appVersion)
+		println(appVersion)
+
+		os.Exit(0)
 	}
 
 	matches := flag.Args()
@@ -59,7 +63,7 @@ func main() {
 		log.Fatalf("invalid filter: %s", err.Error())
 	}
 
-	selected, err := menu.Build(filter.Apply(entries, matches))
+	selected, err := menu.Build(filter.Apply(entries, matches), terminal.Height())
 
 	if err != nil {
 		log.Fatalf("failed to build menu: %s", err.Error())

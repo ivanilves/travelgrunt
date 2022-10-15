@@ -9,7 +9,6 @@ import (
 )
 
 const defaultShell = "bash"
-const defaultLines = 20
 
 func detectShell() string {
 	shell := os.Getenv("SHELL")
@@ -27,28 +26,6 @@ func detectShell() string {
 	}
 
 	return defaultShell
-}
-
-func detectLines() int {
-	lines := os.Getenv("LINES")
-
-	if len(lines) == 0 {
-		return defaultLines
-	}
-
-	lnum, err := strconv.Atoi(lines)
-
-	if err != nil {
-		return defaultLines
-	}
-
-	return lnum
-}
-
-func isMocked() bool {
-	shell := detectShell()
-
-	return shell == "/bin/true" || shell == "/bin/false"
 }
 
 // Name returns a called binary name
@@ -82,13 +59,4 @@ func Spawn(path string) error {
 	cmd.Dir = path
 
 	return cmd.Run()
-}
-
-// PrintAndExit prints a string passed and exits after
-func PrintAndExit(s string) {
-	fmt.Printf("%s\n", s)
-
-	if !isMocked() {
-		os.Exit(0)
-	}
 }

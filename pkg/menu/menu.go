@@ -9,8 +9,26 @@ import (
 
 const label = "Select Terragrunt project to travel"
 
+// Overhead shows how many lines are occupied by menu control elements
+const Overhead = 3
+
+// MinSize stands for minimal menu size
+const MinSize = 5
+
+func getSize(itemCount int, size int) int {
+	if itemCount <= size {
+		return itemCount
+	}
+
+	if size <= MinSize {
+		return MinSize
+	}
+
+	return size
+}
+
 // Build creates an interactive menu to chose Terragrunt project from
-func Build(items []string) (selected string, err error) {
+func Build(items []string, maxSize int) (selected string, err error) {
 	if len(items) == 0 {
 		return "", fmt.Errorf("no items")
 	}
@@ -26,7 +44,7 @@ func Build(items []string) (selected string, err error) {
 	prompt := promptui.Select{
 		Label:    label,
 		Items:    items,
-		Size:     len(items),
+		Size:     getSize(len(items), maxSize-Overhead),
 		Searcher: searcher,
 	}
 

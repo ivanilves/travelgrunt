@@ -25,39 +25,6 @@ func TestDetectShell(t *testing.T) {
 	}
 }
 
-func TestDetectLines(t *testing.T) {
-	assert := assert.New(t)
-
-	cases := map[string]int{
-		"50":  50,
-		"xyz": defaultLines,
-		"":    defaultLines,
-	}
-
-	for input, expected := range cases {
-		os.Setenv("LINES", input)
-
-		assert.Equal(expected, detectLines())
-	}
-}
-
-func TestIsMocked(t *testing.T) {
-	assert := assert.New(t)
-
-	cases := map[string]bool{
-		"/bin/bash":  false,
-		"/bin/zsh":   false,
-		"/bin/true":  true,
-		"/bin/false": true,
-	}
-
-	for input, expected := range cases {
-		os.Setenv("SHELL", input)
-
-		assert.Equal(expected, isMocked())
-	}
-}
-
 func TestName(t *testing.T) {
 	assert := assert.New(t)
 
