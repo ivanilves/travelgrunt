@@ -70,9 +70,11 @@ func main() {
 	}
 
 	if outFile != "" {
-		if err := file.WriteAndExit(outFile, entries[selected]); err != nil {
+		if err := file.Write(outFile, entries[selected]); err != nil {
 			log.Fatalf("failed to write output file: %s", err.Error())
 		}
+
+		os.Exit(0)
 	}
 
 	shell.Spawn(entries[selected])
