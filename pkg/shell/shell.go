@@ -5,18 +5,50 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 )
 
 const defaultShell = "bash"
+const defaultLines = 20
 
 func detectShell() string {
 	shell := os.Getenv("SHELL")
 
-	if len(shell) != 0 {
+	if len(shell) == 0 {
+		return defaultShell
+	}
+
+	if strings.HasSuffix(shell, "/bash") || strings.HasSuffix(shell, "/zsh") {
+		return shell
+	}
+
+	if shell == "/bin/true" || shell == "/bin/false" {
 		return shell
 	}
 
 	return defaultShell
+}
+
+func detectLines() int {
+	lines := os.Getenv("LINES")
+
+	if len(lines) == 0 {
+		return defaultLines
+	}
+
+	lnum, err := strconv.Atoi(lines)
+
+	if err != nil {
+		return defaultLines
+	}
+
+	return lnum
+}
+
+func isMocked() bool {
+	shell := detectShell()
+
+	return shell == "/bin/true" || shell == "/bin/false"
 }
 
 // Name returns a called binary name
@@ -56,5 +88,7 @@ func Spawn(path string) error {
 func PrintAndExit(s string) {
 	fmt.Printf("%s\n", s)
 
-	os.Exit(0)
+	if !isMocked() {
+		os.Exit(0)
+	}
 }
