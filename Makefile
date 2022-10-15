@@ -61,6 +61,9 @@ release: release-binaries release-artifacts release-metadata
 next-version-tag:
 	git tag ${NEXT_VERSION}
 
+push-tags:
+	git push --tags
+
 github-release:
 	scripts/github-create-release.sh ${GITHUB_REPO} ./release
 
@@ -68,3 +71,5 @@ github-assets:
 	scripts/github-upload-assets.sh ${GITHUB_REPO} ./release
 
 github: github-release github-assets
+
+full-release: clean dep release next-version-tag push-tags github
