@@ -15,6 +15,7 @@ main: dep build
 all: dep build install
 
 dep:
+	go mod tidy
 	go mod vendor
 
 build:

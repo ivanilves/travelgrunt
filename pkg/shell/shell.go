@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 )
 
 const defaultShell = "bash"
@@ -12,7 +13,15 @@ const defaultShell = "bash"
 func detectShell() string {
 	shell := os.Getenv("SHELL")
 
-	if len(shell) != 0 {
+	if len(shell) == 0 {
+		return defaultShell
+	}
+
+	if strings.HasSuffix(shell, "/bash") || strings.HasSuffix(shell, "/zsh") {
+		return shell
+	}
+
+	if shell == "/bin/true" || shell == "/bin/false" {
 		return shell
 	}
 
@@ -50,11 +59,4 @@ func Spawn(path string) error {
 	cmd.Dir = path
 
 	return cmd.Run()
-}
-
-// PrintAndExit prints a string passed and exits after
-func PrintAndExit(s string) {
-	fmt.Printf("%s\n", s)
-
-	os.Exit(0)
 }
