@@ -16,12 +16,14 @@ import (
 
 var appVersion = "default"
 
-var version bool
 var outFile string
+var top bool
+var version bool
 
 func init() {
-	flag.BoolVar(&version, "version", false, "print application version and exit")
 	flag.StringVar(&outFile, "outFile", "", "output project path into the file specified instead of spawning a shell")
+	flag.BoolVar(&top, "top", false, "get to the repository top level (root) path and exit")
+	flag.BoolVar(&version, "version", false, "print application version and exit")
 }
 
 func usage() {
@@ -29,6 +31,14 @@ func usage() {
 	println("")
 	println("Options:")
 	flag.PrintDefaults()
+}
+
+func writeFileAndExit(fileName string, data string) {
+	if err := file.Write(fileName, data); err != nil {
+		log.Fatalf("failed to write file (%s): %s", fileName, err.Error())
+	}
+
+	os.Exit(0)
 }
 
 func main() {
@@ -53,6 +63,10 @@ func main() {
 		log.Fatalf("failed to extract top level filesystem path from SCM: %s", err.Error())
 	}
 
+	if top {
+		writeFileAndExit(outFile, rootPath)
+	}
+
 	entries, err := directory.Collect(rootPath)
 
 	if err != nil {
@@ -70,11 +84,7 @@ func main() {
 	}
 
 	if outFile != "" {
-		if err := file.Write(outFile, entries[selected]); err != nil {
-			log.Fatalf("failed to write output file: %s", err.Error())
-		}
-
-		os.Exit(0)
+		writeFileAndExit(outFile, entries[selected])
 	}
 
 	shell.Spawn(entries[selected])
