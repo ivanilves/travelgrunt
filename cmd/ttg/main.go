@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/ivanilves/ttg/pkg/directory"
+	"github.com/ivanilves/ttg/pkg/directory/tree"
 	"github.com/ivanilves/ttg/pkg/file"
 	"github.com/ivanilves/ttg/pkg/filter"
 	"github.com/ivanilves/ttg/pkg/menu"
@@ -67,7 +68,7 @@ func main() {
 		writeFileAndExit(outFile, rootPath)
 	}
 
-	entries, names, err := directory.Collect(rootPath)
+	entries, paths, err := directory.Collect(rootPath)
 
 	if err != nil {
 		log.Fatalf("failed to collect Terragrunt project directories: %s", err.Error())
@@ -77,10 +78,26 @@ func main() {
 		log.Fatalf("invalid filter: %s", err.Error())
 	}
 
-	selected, err := menu.Build(filter.Apply(names, matches), terminal.Height())
+	paths = filter.Apply(paths, matches)
 
-	if err != nil {
-		log.Fatalf("failed to build menu: %s", err.Error())
+	tree := tree.NewTree(paths)
+
+	var selected string
+	var parentID string
+
+	for c := -1; c < tree.LevelCount()-1; c++ {
+		if !tree.HasChildren(c, parentID) {
+			break
+		}
+
+		selected, err = menu.Build(tree.ChildNames(c, parentID), terminal.Height())
+		if err != nil {
+			log.Fatalf("failed to build menu: %s", err.Error())
+		}
+
+		parentID = tree.ChildItems(c, parentID)[selected]
+
+		selected = parentID
 	}
 
 	if outFile != "" {

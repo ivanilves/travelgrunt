@@ -7,7 +7,7 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-const label = "Select Terragrunt project to travel"
+const label = "Select path to travel"
 
 // Overhead shows how many lines are occupied by menu control elements
 const Overhead = 3
@@ -31,6 +31,10 @@ func getSize(itemCount int, size int) int {
 func Build(items []string, maxSize int) (selected string, err error) {
 	if len(items) == 0 {
 		return "", fmt.Errorf("no items")
+	}
+
+	if len(items) == 1 {
+		return items[0], nil
 	}
 
 	searcher := func(input string, index int) bool {
