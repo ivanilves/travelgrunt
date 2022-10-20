@@ -67,7 +67,7 @@ func main() {
 		writeFileAndExit(outFile, rootPath)
 	}
 
-	entries, err := directory.Collect(rootPath)
+	entries, names, err := directory.Collect(rootPath)
 
 	if err != nil {
 		log.Fatalf("failed to collect Terragrunt project directories: %s", err.Error())
@@ -77,7 +77,7 @@ func main() {
 		log.Fatalf("invalid filter: %s", err.Error())
 	}
 
-	selected, err := menu.Build(filter.Apply(entries, matches), terminal.Height())
+	selected, err := menu.Build(filter.Apply(names, matches), terminal.Height())
 
 	if err != nil {
 		log.Fatalf("failed to build menu: %s", err.Error())

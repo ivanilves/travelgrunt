@@ -16,8 +16,9 @@ func isTerragruntConfig(d os.DirEntry) bool {
 }
 
 // Collect gets a list of directory path entries containing file "terragrunt.hcl"
-func Collect(rootPath string) (entries map[string]string, err error) {
+func Collect(rootPath string) (entries map[string]string, names []string, err error) {
 	entries = make(map[string]string, 0)
+	names = make([]string, 0)
 
 	err = filepath.WalkDir(rootPath,
 		func(path string, d os.DirEntry, err error) error {
@@ -34,14 +35,15 @@ func Collect(rootPath string) (entries map[string]string, err error) {
 				rel := strings.TrimPrefix(abs, rootPath+"/")
 
 				entries[rel] = abs
+				names = append(names, rel)
 			}
 
 			return nil
 		})
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return entries, nil
+	return entries, names, nil
 }

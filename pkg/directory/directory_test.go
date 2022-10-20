@@ -20,13 +20,15 @@ func TestCollect(t *testing.T) {
 	}
 
 	for path, expectedSuccess := range testCases {
-		entries, err := Collect(path)
+		entries, names, err := Collect(path)
 
 		if expectedSuccess {
 			assert.Greater(len(entries), 0)
+			assert.Greater(len(names), 0)
 			assert.Nil(err)
 		} else {
 			assert.Equal(0, len(entries))
+			assert.Equal(0, len(names))
 			assert.NotNil(err)
 		}
 	}

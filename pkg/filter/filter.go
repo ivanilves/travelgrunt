@@ -40,8 +40,8 @@ func DoesMatch(s string, matches []string) bool {
 }
 
 // Apply selects strings matching ALL patterns specified and sorts the result (for the sake of determinism)
-func Apply(entries map[string]string, matches []string) (list []string) {
-	for name := range entries {
+func Apply(names []string, matches []string) (list []string) {
+	for _, name := range names {
 		if DoesMatch(name, matches) {
 			list = append(list, name)
 		}
