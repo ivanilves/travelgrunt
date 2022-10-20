@@ -17,7 +17,7 @@ func TestValidate(t *testing.T) {
 func TestApply(t *testing.T) {
 	assert := assert.New(t)
 
-	names := []string{
+	ss := []string{
 		"prod/us-east-1/rds",
 		"prod/us-east-2/rds",
 		"prod/us-east-1/ec2",
@@ -30,13 +30,13 @@ func TestApply(t *testing.T) {
 
 	expected := []string{"dev/us-east-1/rds", "prod/us-east-1/rds"}
 
-	assert.Equal(expected, Apply(names, matches))
+	assert.Equal(expected, Apply(ss, matches))
 }
 
 func TestApplyEmptyFilter(t *testing.T) {
 	assert := assert.New(t)
 
-	names := []string{
+	ss := []string{
 		"prod/us-east-1/rds",
 		"prod/us-east-2/rds",
 		"prod/us-east-1/ec2",
@@ -56,5 +56,5 @@ func TestApplyEmptyFilter(t *testing.T) {
 		"prod/us-east-2/rds",
 	}
 
-	assert.Equal(expected, Apply(names, matches))
+	assert.Equal(expected, Apply(ss, matches))
 }
