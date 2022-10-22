@@ -31,10 +31,11 @@ the shell with aliases `travelgrunt` will not work!
 
 ## How to release a new version?
 
-:bulb: Set `GITHUB_TOKEN` environmental variable.
+:bulb: Export `GITHUB_TOKEN` environmental variable.
 
 Run `make full-release` recipe, which is equal to run following, one by one:
 
+* `make github-token` - check if `GITHUB_TOKEN` variable is set;
 * `make clean` - cleanup project tree from previously built artifacts;
 * `make dep` - ensure all dependencies are installed;
 * `make release` - create release artifacts;

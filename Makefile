@@ -10,6 +10,8 @@ NEXT_VERSION  := v${API_VERSION}.${NEXT_PATCH}
 BUILD_PATH   := ./cmd/${APP_NAME}
 RELEASE_PATH := ./release
 
+-include secrets.mk
+
 default: dep build
 
 all: dep build install
@@ -74,4 +76,7 @@ github-assets:
 
 github: github-release github-assets
 
-full-release: clean dep release next-version-tag push-tags github
+github-token:
+	@test -n "${GITHUB_TOKEN}" || (echo "GITHUB_TOKEN not set!" >>/dev/stderr; exit 1)
+
+full-release: github-token clean dep release next-version-tag push-tags github
