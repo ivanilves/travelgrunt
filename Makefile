@@ -1,5 +1,5 @@
-APP_NAME    := ttg
-GITHUB_REPO := ivanilves/ttg
+APP_NAME    := travelgrunt
+GITHUB_REPO := ivanilves/travelgrunt
 API_VERSION := 0.1
 
 APP_VERSION   := $(shell (git fetch --tags && git tag --sort=creatordate | grep -F "v${API_VERSION}." || echo UNDEFINED) | tail -n1)
@@ -26,7 +26,7 @@ clean:
 
 install: PREFIX := /usr/local
 install:
-	install ${BUILD_PATH}/ttg ${PREFIX}/bin/
+	install ${BUILD_PATH}/travelgrunt ${PREFIX}/bin/
 
 changelog: LAST_RELEASED_TAG:=$(shell git tag --sort=creatordate | tail -n1)
 changelog: GITHUB_COMMIT_URL:=https://github.com/${GITHUB_REPO}/commit

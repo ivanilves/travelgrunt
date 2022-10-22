@@ -3,7 +3,7 @@ package scm
 import (
 	"fmt"
 
-	"github.com/ivanilves/ttg/pkg/scm/git"
+	"github.com/ivanilves/travelgrunt/pkg/scm/git"
 )
 
 func detectSCM() string {

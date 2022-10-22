@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/ivanilves/ttg/pkg/directory"
+	"github.com/ivanilves/travelgrunt/pkg/directory"
 )
 
 const (

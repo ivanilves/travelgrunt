@@ -5,14 +5,14 @@ import (
 	"log"
 	"os"
 
-	"github.com/ivanilves/ttg/pkg/directory"
-	"github.com/ivanilves/ttg/pkg/directory/tree"
-	"github.com/ivanilves/ttg/pkg/file"
-	"github.com/ivanilves/ttg/pkg/filter"
-	"github.com/ivanilves/ttg/pkg/menu"
-	"github.com/ivanilves/ttg/pkg/scm"
-	"github.com/ivanilves/ttg/pkg/shell"
-	"github.com/ivanilves/ttg/pkg/terminal"
+	"github.com/ivanilves/travelgrunt/pkg/directory"
+	"github.com/ivanilves/travelgrunt/pkg/directory/tree"
+	"github.com/ivanilves/travelgrunt/pkg/file"
+	"github.com/ivanilves/travelgrunt/pkg/filter"
+	"github.com/ivanilves/travelgrunt/pkg/menu"
+	"github.com/ivanilves/travelgrunt/pkg/scm"
+	"github.com/ivanilves/travelgrunt/pkg/shell"
+	"github.com/ivanilves/travelgrunt/pkg/terminal"
 )
 
 var appVersion = "default"
@@ -22,7 +22,7 @@ var top bool
 var version bool
 
 func init() {
-	flag.StringVar(&outFile, "outFile", "", "output project path into the file specified instead of spawning a shell")
+	flag.StringVar(&outFile, "out-file", "", "output project path into the file specified instead of spawning a shell")
 	flag.BoolVar(&top, "top", false, "get to the repository top level (root) path and exit")
 	flag.BoolVar(&version, "version", false, "print application version and exit")
 }
