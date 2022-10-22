@@ -13,7 +13,7 @@
 It is **highly** recommended to use `bash` (or `zsh`) aliases. Start from something like this:
 ```
 alias tg='_tg(){ travelgrunt --out-file ~/.travelgrunt-path ${@} && cd "$(cat ~/.travelgrunt-path)" }; _tg'
-alias tt='travelgrunt --top --out-file ~/.travelgrunt-path ${@} && cd "$(cat ~/.travelgrunt-path)"'
+alias tt='travelgrunt --top --out-file ~/.travelgrunt-path && cd "$(cat ~/.travelgrunt-path)"'
 ```
 
 :bulb: `travelgrunt --top` is a "shortcut" that brings you to the top level path of your repository.
