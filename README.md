@@ -12,8 +12,8 @@ Travel **[Terragrunt](https://terragrunt.gruntwork.io/)** directory tree as a fi
 
 It is **absolutely required** to use `bash` (or `zsh`) aliases. Start from something like this:
 ```
-alias tg='_tg(){ travelgrunt --out-file ~/.tg-path ${@} && cd "$(cat ~/.tg-path)" }; _tg'
-alias tt='_tt(){ travelgrunt --top --out-file ~/.tg-path && cd "$(cat ~/.tg-path)" }; _tt'
+alias tg='_tg(){ travelgrunt -out-file ~/.tg-path ${@} && cd "$(cat ~/.tg-path)" }; _tg'
+alias tt='_tt(){ travelgrunt -top -out-file ~/.tg-path && cd "$(cat ~/.tg-path)" }; _tt'
 ```
 
 :bulb: **tt** is a "convenience alias" that brings you to the top level path of your repository.
