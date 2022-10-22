@@ -33,12 +33,12 @@ func Name() string {
 	return os.Args[0]
 }
 
-// IsRunningInside tells us if we try to run inside a shell spawned by ttg
+// IsRunningInside tells us if we try to run inside a shell spawned by travelgrunt
 func IsRunningInside() bool {
 	return os.Getenv("TTG") == "true"
 }
 
-// Getppid returns numerical process ID of the parent ttg process
+// Getppid returns numerical process ID of the parent travelgrunt process
 func Getppid() int {
 	ppid, _ := strconv.Atoi(os.Getenv("TTG_PID"))
 

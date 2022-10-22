@@ -1,4 +1,4 @@
-module github.com/ivanilves/ttg
+module github.com/ivanilves/travelgrunt
 
 go 1.18
 
