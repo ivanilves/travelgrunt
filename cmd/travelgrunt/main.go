@@ -21,8 +21,8 @@ var top bool
 var version bool
 
 func init() {
-	flag.StringVar(&outFile, "out-file", "", "output project path into the file specified instead of spawning a shell")
-	flag.BoolVar(&top, "top", false, "get to the repository top level (root) path and exit")
+	flag.StringVar(&outFile, "out-file", "", "output selected path into the file specified")
+	flag.BoolVar(&top, "top", false, "get to the repository top level (root) path")
 	flag.BoolVar(&version, "version", false, "print application version and exit")
 }
 
