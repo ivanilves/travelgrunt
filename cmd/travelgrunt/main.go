@@ -45,7 +45,7 @@ func buildMenuFromTree(t tree.Tree) string {
 	var selected string
 	var parentID string
 
-	for c := -1; c < t.LevelCount()-1; c++ {
+	for c := -1; c < t.LevelCount(); c++ {
 		if !t.HasChildren(c, parentID) {
 			selected = parentID
 
