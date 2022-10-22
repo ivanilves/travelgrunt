@@ -1,6 +1,6 @@
 APP_NAME    := travelgrunt
 GITHUB_REPO := ivanilves/travelgrunt
-API_VERSION := 0.1
+API_VERSION := 0.2
 
 APP_VERSION   := $(shell (git fetch --tags && git tag --sort=creatordate | grep -F "v${API_VERSION}." || echo UNDEFINED) | tail -n1)
 CURRENT_PATCH := $(shell (git fetch --tags && git tag --sort=creatordate | grep -F "v${API_VERSION}." || echo -1) | tail -n1 | sed -r "s/^v([0-9]+\.){2}//")
