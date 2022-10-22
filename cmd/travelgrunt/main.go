@@ -11,7 +11,6 @@ import (
 	"github.com/ivanilves/travelgrunt/pkg/filter"
 	"github.com/ivanilves/travelgrunt/pkg/menu"
 	"github.com/ivanilves/travelgrunt/pkg/scm"
-	"github.com/ivanilves/travelgrunt/pkg/shell"
 	"github.com/ivanilves/travelgrunt/pkg/terminal"
 )
 
@@ -28,7 +27,7 @@ func init() {
 }
 
 func usage() {
-	println("Usage: " + shell.Name() + " [<match> <match2> ... <matchN>]")
+	println("Usage: " + os.Args[0] + " [<match> <match2> ... <matchN>]")
 	println("")
 	println("Options:")
 	flag.PrintDefaults()
@@ -43,10 +42,6 @@ func writeFileAndExit(fileName string, data string) {
 }
 
 func main() {
-	if shell.IsRunningInside() {
-		log.Fatalf("%s already running (pid: %d), please type \"exit\" to return to the parent shell first", shell.Name(), shell.Getppid())
-	}
-
 	flag.Usage = usage
 	flag.Parse()
 
@@ -104,5 +99,5 @@ func main() {
 		writeFileAndExit(outFile, entries[selected])
 	}
 
-	shell.Spawn(entries[selected])
+	log.Fatal("Please configure shell aliases as described: https://github.com/ivanilves/travelgrunt#shell-aliases")
 }

@@ -1,28 +1,27 @@
 # travelgrunt
 
-**T**ravel **T**erra**g**runt directory tree as a first class passenger! :sunglasses:
+Travel **[Terragrunt](https://terragrunt.gruntwork.io/)** directory tree as a first class passenger! :airplane:
 
 ## How to use?
 
 * `cd` to the directory of your [locally cloned] Terragrunt/Terraform Git repo;
-* run `travelgrunt` command there :rocket: ([optional] arguments are "path filter" matches);
-* use arrow keys to navigate the list and `/` key to search for specific projects;
+* run **tg** alias there :rocket: ([optional] arguments are "path filter" matches);
+* use arrow keys to navigate the list and `/` key to search for specific items;
 
 ## Shell aliases
 
-It is **highly** recommended to use `bash` (or `zsh`) aliases. Start from something like this:
+It is **absolutelly required** to use `bash` (or `zsh`) aliases. Start from something like this:
 ```
 alias tg='_tg(){ travelgrunt --out-file ~/.tg-path ${@} && cd "$(cat ~/.tg-path)" }; _tg'
 alias tt='_tt(){ travelgrunt --top --out-file ~/.tg-path && cd "$(cat ~/.tg-path)" }; _tt'
 ```
 
-:bulb: `travelgrunt --top` is a "shortcut" that brings you to the top level path of your repository.
+:bulb: **tt** is a "convenience alias" that brings you to the top level path of your repository.
 
 ### Why aliases?
-Core aspect of this program is the ability to change working directory while staying **inside the current shell**.
-This can not be done by the program itself, because of obvious security related `POSIX` limitations. Without instrumenting
-the shell with aliases `travelgrunt` still can kinda work, but will provide you with much more awkward and second class user
-experience, i.e. you will need to exit subshell before you "jump" to the next project. :weary:
+Core feature of this program is the ability to change working directory while staying **inside the current shell**.
+This **can not** be done by the program itself, because of `POSIX` security limitations. Without instrumenting
+the shell with aliases `travelgrunt` will not work!
 
 ## How to build?
 
