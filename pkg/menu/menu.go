@@ -28,9 +28,13 @@ func getSize(itemCount int, size int) int {
 }
 
 // Build creates an interactive menu to chose Terragrunt project from
-func Build(items []string, maxSize int) (selected string, err error) {
+func Build(items []string, maxSize int, previous string) (selected string, err error) {
 	if len(items) == 0 {
 		return "", fmt.Errorf("no items")
+	}
+
+	if len(previous) > 0 {
+		fmt.Printf("=> %s\n", previous)
 	}
 
 	if len(items) == 1 {

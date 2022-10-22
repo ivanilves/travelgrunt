@@ -10,7 +10,7 @@ Travel **[Terragrunt](https://terragrunt.gruntwork.io/)** directory tree as a fi
 
 ## Shell aliases
 
-It is **absolutelly required** to use `bash` (or `zsh`) aliases. Start from something like this:
+It is **absolutely required** to use `bash` (or `zsh`) aliases. Start from something like this:
 ```
 alias tg='_tg(){ travelgrunt --out-file ~/.tg-path ${@} && cd "$(cat ~/.tg-path)" }; _tg'
 alias tt='_tt(){ travelgrunt --top --out-file ~/.tg-path && cd "$(cat ~/.tg-path)" }; _tt'

@@ -10,9 +10,11 @@ NEXT_VERSION  := v${API_VERSION}.${NEXT_PATCH}
 BUILD_PATH   := ./cmd/${APP_NAME}
 RELEASE_PATH := ./release
 
-main: dep build
+default: dep build
 
 all: dep build install
+
+deploy: build install
 
 dep:
 	go mod tidy
