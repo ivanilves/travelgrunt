@@ -41,6 +41,33 @@ func writeFileAndExit(fileName string, data string) {
 	os.Exit(0)
 }
 
+func buildMenuFromTree(t tree.Tree) string {
+	var selected string
+	var parentID string
+
+	for c := -1; c < t.LevelCount()-1; c++ {
+		if !t.HasChildren(c, parentID) {
+			selected = parentID
+
+			break
+		}
+
+		selected, err := menu.Build(t.ChildNames(c, parentID), terminal.Height(), parentID)
+
+		if err != nil {
+			if err.Error() == "^C" {
+				os.Exit(1)
+			}
+
+			log.Fatalf("failed to build menu: %s", err.Error())
+		}
+
+		parentID = t.ChildItems(c, parentID)[selected]
+	}
+
+	return selected
+}
+
 func main() {
 	flag.Usage = usage
 	flag.Parse()
@@ -50,8 +77,6 @@ func main() {
 
 		os.Exit(0)
 	}
-
-	matches := flag.Args()
 
 	rootPath, err := scm.RootPath()
 
@@ -69,31 +94,13 @@ func main() {
 		log.Fatalf("failed to collect Terragrunt project directories: %s", err.Error())
 	}
 
-	if err := filter.Validate(matches); err != nil {
+	if err := filter.Validate(flag.Args()); err != nil {
 		log.Fatalf("invalid filter: %s", err.Error())
 	}
 
-	paths = filter.Apply(paths, matches)
-
-	tree := tree.NewTree(paths)
-
-	var selected string
-	var parentID string
-
-	for c := -1; c < tree.LevelCount()-1; c++ {
-		if !tree.HasChildren(c, parentID) {
-			break
-		}
-
-		selected, err = menu.Build(tree.ChildNames(c, parentID), terminal.Height())
-		if err != nil {
-			log.Fatalf("failed to build menu: %s", err.Error())
-		}
-
-		parentID = tree.ChildItems(c, parentID)[selected]
-
-		selected = parentID
-	}
+	selected := buildMenuFromTree(
+		tree.NewTree(filter.Apply(paths, flag.Args())),
+	)
 
 	if outFile != "" {
 		writeFileAndExit(outFile, entries[selected])
