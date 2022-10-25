@@ -26,7 +26,7 @@ build:
 	cd ${BUILD_PATH} && go build
 
 clean:
-	git clean -fdx
+	git clean -fdx -e secrets.mk
 
 install: PREFIX := /usr/local
 install:
