@@ -39,6 +39,12 @@ curl -s -f \
   | PREFIX=/somewhere/else sh
 ```
 
+Install with homebrew:
+```
+brew tap ivanilves/travelgrunt
+brew install ivanilves/travelgrunt
+```
+
 ## How to build?
 
 * `make dep` - install/ensure dependencies;
