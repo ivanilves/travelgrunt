@@ -12,7 +12,7 @@ func isHidden(d os.DirEntry) bool {
 }
 
 func isTerragruntConfig(d os.DirEntry) bool {
-	return d.Type().IsRegular() && d.Name() == "terragrunt.hcl"
+	return (d.Type().IsRegular() || d.Type() == os.ModeSymlink) && d.Name() == "terragrunt.hcl"
 }
 
 // Collect gets a list of directory path entries containing file "terragrunt.hcl"
