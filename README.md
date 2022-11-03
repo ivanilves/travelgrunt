@@ -23,16 +23,16 @@ Core feature of this program is the ability to change working directory while st
 This **can not** be done by the program itself, because of `POSIX` security limitations. Without instrumenting
 the shell with aliases `travelgrunt` will not work!
 
-## How to install?
+## How to install? :neckbeard:
 
-### Install with homebrew
+### Install with `homebrew`:
 
 ```
 brew tap ivanilves/tap
 brew install ivanilves/tap/travelgrunt
 ```
 
-### Install latest binary with cURL
+### Install latest binary with `cURL` + `sh`:
 Install latest release binary into `/usr/local/bin` (default):
 
 ```
@@ -47,10 +47,19 @@ curl -s -f \
   | PREFIX=/somewhere/else sh
 ```
 
-## How to build?
+## How to build? :construction:
 
 * `make dep` - install/ensure dependencies;
 * `make build` - build the `travelgrunt` binary in `cmd/travelgrunt` path;
 * `make install` - [optional] install built `travelgrunt` binary under the `${PREFIX}/bin` location;
 
-[How to release a new version?](RELEASE.md) :package:
+## How to release a new version? :package:
+
+:bulb: Make sure you have push permissions for this repository!
+
+Run `make release` recipe, which will:
+* check, if you are on a `main` branch;
+* pull the latest `main` branch from remote;
+* calculate the next release version (update `MAJOR`.`MINOR` [here](https://github.com/ivanilves/travelgrunt/blob/main/Makefile#L2) if needed);
+* tag the branch tip with the version calculated and push tag to remote then;
+* [GoReleaser](https://github.com/ivanilves/travelgrunt/blob/main/.goreleaser.yml) will take care of everything else :sunglasses:

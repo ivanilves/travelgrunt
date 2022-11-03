@@ -32,7 +32,10 @@ check-git-branch:
 		then echo "ERR: Need to be on the \"${GIT_BRANCH}\" branch" >>/dev/stderr; \
 		exit 1; fi
 
+pull-git-branch:
+	git pull
+
 next-version-tag:
 	git tag ${NEXT_VERSION} && git push --tags
 
-release: check-git-branch next-version-tag
+release: check-git-branch pull-git-branch next-version-tag
