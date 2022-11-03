@@ -1,34 +1,41 @@
 before:
   hooks:
-    - go mod download
+  - go mod download
+
 builds:
-  - goos:
-      - linux
-      - darwin
-    goarch:
-      - amd64
-      - arm64
-    main: ./cmd/travelgrunt/main.go
-    ldflags:
-      - -X main.appVersion={{.Env.RELEASE_VERSION}}
+- goos:
+  - linux
+  - darwin
+  goarch:
+  - amd64
+  - arm64
+  main: ./cmd/travelgrunt/main.go
+  ldflags:
+  - -X main.appVersion={{.Env.RELEASE_VERSION}}
+
 brews:
-  - name: travelgrunt
-    homepage: 'https://github.com/ivanilves/travelgrunt'
-    description: 'Travel Terragrunt directory tree as a first class passenger!'
-    folder: Formula
-    tap:
-      owner: ivanilves
-      name: homebrew-travelgrunt
+- name: travelgrunt
+  homepage: 'https://github.com/ivanilves/travelgrunt'
+  description: 'Travel Terragrunt directory tree as a first class passenger!'
+  folder: Formula
+  tap:
+    owner: ivanilves
+    name: homebrew-tap
+
 archives:
-  - name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    format: tar.gz
+- name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}"
+  format: tar.gz
+
 checksum:
   name_template: 'checksums.txt'
+
 snapshot:
   name_template: "{{ .Tag }}-next"
+
 changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+    - '^docs:'
+    - '^test:'
+    - '^skip:'

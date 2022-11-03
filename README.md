@@ -25,6 +25,14 @@ the shell with aliases `travelgrunt` will not work!
 
 ## How to install?
 
+### Install with homebrew
+
+```
+brew tap ivanilves/tap
+brew install ivanilves/tap/travelgrunt
+```
+
+### Install latest binary with cURL
 Install latest release binary into `/usr/local/bin` (default):
 
 ```
@@ -37,12 +45,6 @@ Install latest release binary into `/somewhere/else/bin`:
 curl -s -f \
   https://raw.githubusercontent.com/ivanilves/travelgrunt/main/scripts/install-latest.sh \
   | PREFIX=/somewhere/else sh
-```
-
-Install with homebrew:
-```
-brew tap ivanilves/travelgrunt
-brew install ivanilves/travelgrunt
 ```
 
 ## How to build?

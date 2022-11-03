@@ -11,4 +11,4 @@ LATEST_TAG=$(curl -s -f https://api.github.com/repos/ivanilves/travelgrunt/relea
 OS=$(uname -s | tr '[A-Z]' '[a-z]')
 ARCH=$(uname -m | sed 's/x86_64/amd64/')
 
-curl -s -f -L -o - https://github.com/ivanilves/travelgrunt/releases/download/${LATEST_TAG}/travelgrunt-${OS}-${ARCH}.tar.gz | tar -xz -C ${PREFIX}/bin
+curl -s -f -L -o - https://github.com/ivanilves/travelgrunt/releases/download/${LATEST_TAG}/travelgrunt_${LATEST_TAG}_${OS}_${ARCH}.tar.gz | tar -xz -C ${PREFIX}/bin
