@@ -17,7 +17,7 @@ dep:
 	go mod vendor
 
 build:
-	cd ${BUILD_PATH} && go build
+	cd ${BUILD_PATH} && go build -tags netgo,osusergo
 
 clean:
 	git clean -fdx

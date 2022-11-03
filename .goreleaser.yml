@@ -12,6 +12,9 @@ builds:
   main: ./cmd/travelgrunt/main.go
   ldflags:
   - -X main.appVersion={{.Env.RELEASE_VERSION}}
+  tags:
+  - netgo
+  - osusergo
 
 brews:
 - name: travelgrunt
