@@ -14,11 +14,7 @@
 # Dependency directories
 vendor/
 
-# secret Makefile
-secrets.mk
-
 # Compiled binaries and assets
 /cmd/travelgrunt/*
 !/cmd/travelgrunt/*.go
-/release/*
-!/release/.gitkeep
+/dist/*
