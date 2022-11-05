@@ -1,0 +1,17 @@
+name: Semantic
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  semantic:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Get "base" and "PR" Git branches
+      run: git remote update && git checkout ${GITHUB_BASE_REF} && git checkout ${GITHUB_HEAD_REF}
+
+    - name: Check commit message semantics
+      run: make semantic RANGE=${GITHUB_BASE_REF}..${GITHUB_HEAD_REF}
