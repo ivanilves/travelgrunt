@@ -5,13 +5,14 @@ import (
 	"strings"
 )
 
+// Tree is a hierarchical representation of the directory contents
 type Tree struct {
-	nodes map[string]Node
+	nodes map[string]node
 
 	levels []map[string]string
 }
 
-type Node struct {
+type node struct {
 	name     string
 	path     string
 	parent   string
@@ -47,11 +48,9 @@ func getLevels(paths []string) (levels []map[string]string) {
 }
 
 func getNodeParent(path string, parentLevel map[string]string) string {
-	if parentLevel != nil {
-		for parentPath := range parentLevel {
-			if strings.HasPrefix(path, parentPath+"/") {
-				return parentPath
-			}
+	for parentPath := range parentLevel {
+		if strings.HasPrefix(path, parentPath+"/") {
+			return parentPath
 		}
 	}
 
@@ -74,14 +73,14 @@ func getNodeChildren(path string, levels []map[string]string, idx int) (children
 	return children
 }
 
-func getNodes(levels []map[string]string) (nodes map[string]Node) {
-	nodes = make(map[string]Node, 0)
+func getNodes(levels []map[string]string) (nodes map[string]node) {
+	nodes = make(map[string]node, 0)
 
 	var prevLevel map[string]string
 
 	for idx, level := range levels {
 		for path, name := range level {
-			nodes[path] = Node{
+			nodes[path] = node{
 				name:     name,
 				path:     path,
 				parent:   getNodeParent(path, prevLevel),
@@ -111,6 +110,7 @@ func sortedKeys(items map[string]string) (keys []string) {
 	return keys
 }
 
+// NewTree creates a new Tree struct from the passed list of directory paths
 func NewTree(paths []string) Tree {
 	levels := getLevels(paths)
 
@@ -119,11 +119,12 @@ func NewTree(paths []string) Tree {
 	return Tree{nodes: nodes, levels: levels}
 }
 
+// LevelCount gives us the number of hierarchical levels inside the tree
 func (t Tree) LevelCount() int {
 	return len(t.levels)
 }
 
-func (t Tree) LevelItems(idx int) (items map[string]string) {
+func (t Tree) levelItems(idx int) (items map[string]string) {
 	if len(t.levels) <= idx+1 {
 		return nil
 	}
@@ -137,6 +138,7 @@ func (t Tree) LevelItems(idx int) (items map[string]string) {
 	return items
 }
 
+// ChildItems gives us a list of child items for the [parent] node located on the given level ID and the given path
 func (t Tree) ChildItems(idx int, parentPath string) (items map[string]string) {
 	if len(t.levels) < idx+1 {
 		return nil
@@ -147,7 +149,7 @@ func (t Tree) ChildItems(idx int, parentPath string) (items map[string]string) {
 	}
 
 	if idx == -1 {
-		return t.LevelItems(0)
+		return t.levelItems(0)
 	}
 
 	items = make(map[string]string, len(t.levels[idx+1]))
@@ -161,10 +163,12 @@ func (t Tree) ChildItems(idx int, parentPath string) (items map[string]string) {
 	return items
 }
 
+// ChildNames gives us a list of child names for the [parent] node located on the given level ID and the given path
 func (t Tree) ChildNames(idx int, parentPath string) []string {
 	return sortedKeys(t.ChildItems(idx, parentPath))
 }
 
+// HasChildren tells us if a node on the given level ID and the given path has child nodes (if node is a parent itself)
 func (t Tree) HasChildren(idx int, parentPath string) bool {
 	return len(t.ChildItems(idx, parentPath)) > 0
 }
