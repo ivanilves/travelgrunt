@@ -4,8 +4,9 @@ import (
 	"os"
 )
 
-func Write(outFile string, path string) error {
-	err := os.WriteFile(outFile, []byte(path), 0644)
+// Write writes a file with the content specified
+func Write(outFile string, content string) error {
+	err := os.WriteFile(outFile, []byte(content), 0644)
 
 	return err
 }

@@ -24,6 +24,12 @@ build:
 test:
 	go test -v ./...
 
+lint:
+	golangci-lint run -v ./...
+
+staticcheck:
+	staticcheck ./...
+
 clean:
 	git clean -fdx
 
@@ -45,9 +51,9 @@ next-version-tag:
 
 release: check-git-branch pull-git-branch next-version-tag
 
-semantic: RANGE ?= main..HEAD
-semantic: REGEX := "^(feat|fix|refactor|chore|test|style|docs)(\([a-zA-Z0-9\/_-]+\))?: [a-zA-Z]"
-semantic:
+semantic-commit-check: RANGE ?= main..HEAD
+semantic-commit-check: REGEX := "^(feat|fix|refactor|chore|test|style|docs)(\([a-zA-Z0-9\/_-]+\))?: [a-zA-Z]"
+semantic-commit-check:
 	@git log --pretty="format:%s" ${RANGE} >/dev/null
 	@git log --pretty="format:%s" ${RANGE} | egrep -v "Merge " \
 		| egrep -v ${REGEX} | awk '{print "NON-SEMANTIC: "$$0}' | grep . \

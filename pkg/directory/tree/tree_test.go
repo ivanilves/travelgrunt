@@ -52,9 +52,9 @@ func TestLevelCount(t *testing.T) {
 func TestLevelItems(t *testing.T) {
 	assert := assert.New(t)
 
-	assert.Nil(mock.LevelItems(10))
+	assert.Nil(mock.levelItems(10))
 
-	items := mock.LevelItems(0)
+	items := mock.levelItems(0)
 
 	assert.NotNil(items)
 	assert.Equal(1, len(items))
@@ -66,7 +66,7 @@ func TestChildItems(t *testing.T) {
 
 	assert.Nil(mock.ChildItems(10, "whatever"))
 	assert.Equal(map[string]string{}, mock.ChildItems(4, "terragrunt/prod/region-1/k8s/foo"))
-	assert.Equal(mock.LevelItems(0), mock.ChildItems(-1, "ignored-if-minus-one-passed"))
+	assert.Equal(mock.levelItems(0), mock.ChildItems(-1, "ignored-if-minus-one-passed"))
 
 	items := mock.ChildItems(0, "terragrunt")
 	expected := map[string]string{"dev": "terragrunt/dev", "prod": "terragrunt/prod"}
