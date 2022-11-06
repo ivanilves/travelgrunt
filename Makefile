@@ -30,6 +30,9 @@ lint:
 staticcheck:
 	staticcheck ./...
 
+coverage:
+	go test ./... -race -coverprofile=coverage.out -covermode=atomic
+
 clean:
 	git clean -fdx
 

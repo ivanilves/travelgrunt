@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/github/ivanilves/travelgrunt/branch/main/graph/badge.svg?token=SW21884ADR)](https://codecov.io/github/ivanilves/travelgrunt)
+
 # travelgrunt
 
 Travel **[Terragrunt](https://terragrunt.gruntwork.io/)** directory tree as a first class passenger! :airplane:
