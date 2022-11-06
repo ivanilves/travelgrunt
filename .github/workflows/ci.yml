@@ -56,3 +56,21 @@ jobs:
 
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v3
+
+  codecov:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.19
+
+    - name: Run coverage
+      run: make coverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
