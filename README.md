@@ -1,4 +1,6 @@
+[![codeclimate](https://api.codeclimate.com/v1/badges/857b9074dbf627e4f594/maintainability)](https://codeclimate.com/github/ivanilves/travelgrunt/maintainability)
 [![codecov](https://codecov.io/github/ivanilves/travelgrunt/branch/main/graph/badge.svg?token=SW21884ADR)](https://codecov.io/github/ivanilves/travelgrunt)
+
 
 # travelgrunt
 
