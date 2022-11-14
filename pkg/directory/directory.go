@@ -41,9 +41,5 @@ func Collect(rootPath string) (entries map[string]string, paths []string, err er
 			return nil
 		})
 
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return entries, paths, nil
+	return entries, paths, err
 }
