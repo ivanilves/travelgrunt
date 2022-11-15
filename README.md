@@ -4,13 +4,33 @@
 
 # travelgrunt
 
-Travel **[Terragrunt](https://terragrunt.gruntwork.io/)** directory tree as a first class passenger! :airplane:
+Travel **[Terragrunt](https://terragrunt.gruntwork.io/)** or **[Terraform](https://www.terraform.io/)** directory tree as a first class passenger! :airplane:
 
 ## How to use?
 
 * `cd` to the directory of your [locally cloned] Terragrunt/Terraform Git repo;
 * run **tg** [alias](#shell-aliases) there :rocket: ([optional] arguments are "path filter" matches);
 * use arrow keys to navigate the list and `/` key to search for specific items;
+
+## Configuration
+:bulb: `travelgrunt` doesn't need a configuration file, but can take advantage from having one :ok_hand:
+
+Create `.travelgrunt.yml` file in the root path of your repository. Set it content to either:
+
+```
+mode: terragrunt
+```
+:arrow_up: this will follow the **default behavior** to travel across Terragrunt projects (you don't even need a config for this!).
+
+```
+mode: terraform
+```
+:arrow_up: this will navigate through Terraform projects/modules instead of Terragrunt ones. Use case: Terraform module [mono]repo.
+
+```
+mode: terraform_or_terragrunt
+```
+:arrow_up: this will navigate through **both** Terraform and Terragrunt projects inside the repo.
 
 ## Shell aliases
 
