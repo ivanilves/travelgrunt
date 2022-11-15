@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/ivanilves/travelgrunt/pkg/config"
 	"github.com/ivanilves/travelgrunt/pkg/directory"
 )
 
@@ -17,7 +18,9 @@ var (
 )
 
 func mockTree() Tree {
-	_, paths, _ := directory.Collect(fixturePath)
+	cfg := config.DefaultConfig()
+
+	_, paths, _ := directory.Collect(fixturePath, cfg.IncludeFn())
 
 	return NewTree(paths)
 }

@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/ivanilves/travelgrunt/pkg/config"
 )
 
 const (
@@ -14,13 +16,15 @@ const (
 func TestCollect(t *testing.T) {
 	assert := assert.New(t)
 
+	cfg := config.DefaultConfig()
+
 	testCases := map[string]bool{
 		fixturePath: true,
 		invalidPath: false,
 	}
 
 	for path, expectedSuccess := range testCases {
-		entries, paths, err := Collect(path)
+		entries, paths, err := Collect(path, cfg.IncludeFn())
 
 		if expectedSuccess {
 			assert.Greater(len(entries), 0)

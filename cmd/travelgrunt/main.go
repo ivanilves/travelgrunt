@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/ivanilves/travelgrunt/pkg/config"
 	"github.com/ivanilves/travelgrunt/pkg/directory"
 	"github.com/ivanilves/travelgrunt/pkg/directory/tree"
 	"github.com/ivanilves/travelgrunt/pkg/file"
@@ -88,7 +89,13 @@ func main() {
 		writeFileAndExit(outFile, rootPath)
 	}
 
-	entries, paths, err := directory.Collect(rootPath)
+	cfg, err := config.NewConfig(rootPath)
+
+	if err != nil {
+		log.Fatalf("failed to load travelgrunt config: %s", err.Error())
+	}
+
+	entries, paths, err := directory.Collect(rootPath, cfg.IncludeFn())
 
 	if err != nil {
 		log.Fatalf("failed to collect Terragrunt project directories: %s", err.Error())

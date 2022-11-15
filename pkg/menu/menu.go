@@ -58,9 +58,5 @@ func Build(items []string, maxSize int, previous string) (selected string, err e
 
 	_, selected, err = prompt.Run()
 
-	if err != nil {
-		return "", err
-	}
-
-	return selected, nil
+	return selected, err
 }

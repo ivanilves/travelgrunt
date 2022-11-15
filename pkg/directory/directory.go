@@ -2,21 +2,16 @@ package directory
 
 import (
 	"os"
-	"strings"
-
 	"path/filepath"
+	"strings"
 )
 
 func isHidden(d os.DirEntry) bool {
 	return d.IsDir() && string(d.Name()[0]) == "."
 }
 
-func isTerragruntConfig(d os.DirEntry) bool {
-	return (d.Type().IsRegular() || d.Type() == os.ModeSymlink) && d.Name() == "terragrunt.hcl"
-}
-
 // Collect gets a list of directory path entries containing file "terragrunt.hcl"
-func Collect(rootPath string) (entries map[string]string, paths []string, err error) {
+func Collect(rootPath string, includeFn func(os.DirEntry) bool) (entries map[string]string, paths []string, err error) {
 	entries = make(map[string]string, 0)
 	paths = make([]string, 0)
 
@@ -30,7 +25,7 @@ func Collect(rootPath string) (entries map[string]string, paths []string, err er
 				return filepath.SkipDir
 			}
 
-			if isTerragruntConfig(d) {
+			if includeFn(d) {
 				abs := filepath.Dir(path)
 				rel := strings.TrimPrefix(abs, rootPath+"/")
 
@@ -41,9 +36,5 @@ func Collect(rootPath string) (entries map[string]string, paths []string, err er
 			return nil
 		})
 
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return entries, paths, nil
+	return entries, paths, err
 }

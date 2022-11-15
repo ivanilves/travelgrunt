@@ -45,3 +45,4 @@ changelog:
     - '^test'
     - '^style'
     - '^docs'
+    - '^Merge pull request'
