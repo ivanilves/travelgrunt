@@ -4,7 +4,7 @@
 
 # travelgrunt
 
-Travel **[Terragrunt](https://terragrunt.gruntwork.io/)** or **[Terraform](https://www.terraform.io/)** directory tree as a first class passenger! :airplane:
+Travel **[Terragrunt](https://terragrunt.gruntwork.io/)** or **[Terraform](https://www.terraform.io/)** or ... ANY directory tree as a first class passenger! :airplane:
 
 ## How to use?
 
@@ -31,6 +31,11 @@ mode: terraform
 mode: terraform_or_terragrunt
 ```
 :arrow_up: this will navigate through **both** Terraform and Terragrunt projects inside the repo.
+
+```
+mode: dockerfile
+```
+:arrow_up: with this `travelgrunt` will navigate across Dockerfiles or Dockerfile templates.
 
 ## Shell aliases
 

@@ -20,12 +20,14 @@ func TestIncludeFn(t *testing.T) {
 		IsTerragrunt            bool
 		IsTerraform             bool
 		IsTerraformOrTerragrunt bool
+		IsDockerfile            bool
 	}
 
 	testCases := map[string]testCase{
-		"../../../fixtures/config/include/terragrunt/terragrunt.hcl": testCase{true, false, true},
-		"../../../fixtures/config/include/terraform/main.tf":         testCase{false, true, true},
-		"../../../fixtures/config/include/nothing/foo.bar":           testCase{false, false, false},
+		"../../../fixtures/config/include/terragrunt/terragrunt.hcl": testCase{true, false, true, false},
+		"../../../fixtures/config/include/terraform/main.tf":         testCase{false, true, true, false},
+		"../../../fixtures/config/include/dockerfile/Dockerfile":     testCase{false, false, false, true},
+		"../../../fixtures/config/include/nothing/foo.bar":           testCase{false, false, false, false},
 	}
 
 	err := filepath.WalkDir(fixturePath,
@@ -37,6 +39,7 @@ func TestIncludeFn(t *testing.T) {
 					assert.Equal(expected.IsTerragrunt, IsTerragrunt(d))
 					assert.Equal(expected.IsTerraform, IsTerraform(d))
 					assert.Equal(expected.IsTerraformOrTerragrunt, IsTerraformOrTerragrunt(d))
+					assert.Equal(expected.IsDockerfile, IsDockerfile(d))
 				}
 			}
 
