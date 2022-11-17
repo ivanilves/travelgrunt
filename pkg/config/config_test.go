@@ -31,6 +31,7 @@ func TestNewConfig(t *testing.T) {
 		"travelgrunt.yml.terragrunt":              {cfg: getConfig("terragrunt", false), success: true, includeFn: include.IsTerragrunt},
 		"travelgrunt.yml.terraform":               {cfg: getConfig("terraform", false), success: true, includeFn: include.IsTerraform},
 		"travelgrunt.yml.terraform_or_terragrunt": {cfg: getConfig("terraform_or_terragrunt", false), success: true, includeFn: include.IsTerraformOrTerragrunt},
+		"travelgrunt.yml.dockerfile":              {cfg: getConfig("dockerfile", false), success: true, includeFn: include.IsDockerfile},
 		"travelgrunt.yml.invalid":                 {cfg: getConfig("", false), success: false, includeFn: nil},
 		"travelgrunt.yml.illegal":                 {cfg: getConfig("bogus", false), success: false, includeFn: nil},
 		"travelgrunt.yml.nonexistent":             {cfg: getConfig("terragrunt", true), success: true, includeFn: include.IsTerragrunt},

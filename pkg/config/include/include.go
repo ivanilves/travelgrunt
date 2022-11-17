@@ -23,3 +23,8 @@ func IsTerraform(d os.DirEntry) bool {
 func IsTerraformOrTerragrunt(d os.DirEntry) bool {
 	return IsTerraform(d) || IsTerragrunt(d)
 }
+
+// IsDockerfile tells us if we operate on Dockerfile(s) or Dockerfile template(s)
+func IsDockerfile(d os.DirEntry) bool {
+	return fileOrSymlink(d) && strings.Contains(strings.ToLower(d.Name()), "dockerfile")
+}
