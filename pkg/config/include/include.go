@@ -28,3 +28,18 @@ func IsTerraformOrTerragrunt(d os.DirEntry) bool {
 func IsDockerfile(d os.DirEntry) bool {
 	return fileOrSymlink(d) && strings.Contains(strings.ToLower(d.Name()), "dockerfile")
 }
+
+// IsJenkinsfile tells us we operate on Jenkinsfile(s)
+func IsJenkinsfile(d os.DirEntry) bool {
+	return fileOrSymlink(d) && strings.Contains(strings.ToLower(d.Name()), "jenkinsfile")
+}
+
+// IsGroovy tells us we operate on Groovy file(s)
+func IsGroovy(d os.DirEntry) bool {
+	return fileOrSymlink(d) && strings.HasSuffix(d.Name(), ".groovy")
+}
+
+// IsJenkins tells us we operate on Jenkinsfile(s) or Groovy file(s)
+func IsJenkins(d os.DirEntry) bool {
+	return IsJenkinsfile(d) || IsGroovy(d)
+}
