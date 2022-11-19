@@ -57,6 +57,9 @@ jobs:
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v3
 
+    - name: golint
+      uses: Jerome1337/golint-action@v1.0.3
+
   codecov:
     runs-on: ubuntu-latest
     steps:

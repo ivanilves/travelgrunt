@@ -24,8 +24,16 @@ build:
 test:
 	go test -v ./...
 
-lint:
+golangci-lint:
 	golangci-lint run -v ./...
+
+golint:
+	golint ./...
+
+lint: golangci-lint golint
+
+vet:
+	go vet ./...
 
 staticcheck:
 	staticcheck ./...
