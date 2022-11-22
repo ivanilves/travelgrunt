@@ -37,7 +37,7 @@ func NewConfig(path string) (cfg Config, err error) {
 }
 
 func validate(cfg Config) error {
-	allowedModes := []string{"terragrunt", "terraform", "terraform_or_terragrunt", "dockerfile"}
+	allowedModes := []string{"terragrunt", "terraform", "terraform_or_terragrunt", "dockerfile", "jenkins"}
 
 	for _, mode := range allowedModes {
 		if cfg.Mode == mode {
@@ -64,6 +64,8 @@ func (cfg Config) IncludeFn() (fn func(os.DirEntry) bool) {
 		fn = include.IsTerraformOrTerragrunt
 	case "dockerfile":
 		fn = include.IsDockerfile
+	case "jenkins":
+		fn = include.IsJenkins
 	default:
 		fn = nil
 	}
