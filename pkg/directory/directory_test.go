@@ -24,7 +24,7 @@ func TestCollect(t *testing.T) {
 	}
 
 	for path, expectedSuccess := range testCases {
-		entries, paths, err := Collect(path, cfg.IncludeFn())
+		entries, paths, err := Collect(path, cfg.IncludeFn)
 
 		if expectedSuccess {
 			assert.Greater(len(entries), 0)
