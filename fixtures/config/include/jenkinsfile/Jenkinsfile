@@ -1,0 +1,3 @@
+pipeline {
+  // this is a dummy/fixture Jenkinsfile
+}
