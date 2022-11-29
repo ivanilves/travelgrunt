@@ -95,7 +95,7 @@ func main() {
 		log.Fatalf("failed to load travelgrunt config: %s", err.Error())
 	}
 
-	entries, paths, err := directory.Collect(rootPath, cfg.IncludeFn())
+	entries, paths, err := directory.Collect(rootPath, cfg.IncludeFn)
 
 	if err != nil {
 		log.Fatalf("failed to collect Terragrunt project directories: %s", err.Error())

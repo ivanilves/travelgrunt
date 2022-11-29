@@ -11,9 +11,10 @@ import (
 
 var configFile = ".travelgrunt.yml"
 
-// Config is a travelgrunt repo-level configuration
+// Config contains travelgrunt repo-level configuration
 type Config struct {
-	Mode string `yaml:"mode"`
+	Mode      string `yaml:"mode"`
+	IncludeFn func(os.DirEntry) bool
 
 	IsDefault bool
 }
@@ -33,29 +34,25 @@ func NewConfig(path string) (cfg Config, err error) {
 		return cfg, err
 	}
 
-	return cfg, validate(cfg)
-}
+	cfg.IncludeFn, err = GetIncludeFn(cfg.Mode)
 
-func validate(cfg Config) error {
-	allowedModes := []string{"terragrunt", "terraform", "terraform_or_terragrunt", "dockerfile", "jenkins"}
-
-	for _, mode := range allowedModes {
-		if cfg.Mode == mode {
-			return nil
-		}
-	}
-
-	return fmt.Errorf("illegal mode: %s", cfg.Mode)
+	return cfg, err
 }
 
 // DefaultConfig returns default travelgrunt repo-level configuration
 func DefaultConfig() Config {
-	return Config{Mode: "terragrunt", IsDefault: true}
+	return Config{
+		Mode:      "terragrunt",
+		IncludeFn: include.IsTerragrunt,
+		IsDefault: true,
+	}
 }
 
-// IncludeFn returns the "include" function used to select relevant directories
-func (cfg Config) IncludeFn() (fn func(os.DirEntry) bool) {
-	switch cfg.Mode {
+// GetIncludeFn gets an "include" func for the given mode (if mode is unknown, it returns a nil func and a non-nil error)
+func GetIncludeFn(mode string) (fn func(os.DirEntry) bool, err error) {
+	err = nil
+
+	switch mode {
 	case "terragrunt":
 		fn = include.IsTerragrunt
 	case "terraform":
@@ -68,7 +65,8 @@ func (cfg Config) IncludeFn() (fn func(os.DirEntry) bool) {
 		fn = include.IsJenkins
 	default:
 		fn = nil
+		err = fmt.Errorf("illegal mode: %s", mode)
 	}
 
-	return fn
+	return fn, err
 }

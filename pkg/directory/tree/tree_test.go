@@ -20,7 +20,7 @@ var (
 func mockTree() Tree {
 	cfg := config.DefaultConfig()
 
-	_, paths, _ := directory.Collect(fixturePath, cfg.IncludeFn())
+	_, paths, _ := directory.Collect(fixturePath, cfg.IncludeFn)
 
 	return NewTree(paths)
 }
