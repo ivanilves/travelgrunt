@@ -4,6 +4,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/ivanilves/travelgrunt/pkg/config"
 )
 
 func isHidden(d os.DirEntry) bool {
@@ -11,7 +13,7 @@ func isHidden(d os.DirEntry) bool {
 }
 
 // Collect gets a list of directory path entries containing file "terragrunt.hcl"
-func Collect(rootPath string, includeFn func(os.DirEntry) bool) (entries map[string]string, paths []string, err error) {
+func Collect(rootPath string, cfg config.Config) (entries map[string]string, paths []string, err error) {
 	entries = make(map[string]string, 0)
 	paths = make([]string, 0)
 
@@ -25,7 +27,7 @@ func Collect(rootPath string, includeFn func(os.DirEntry) bool) (entries map[str
 				return filepath.SkipDir
 			}
 
-			if includeFn(d) {
+			if cfg.IncludeFn(d) {
 				abs := filepath.Dir(path)
 				rel := strings.TrimPrefix(abs, rootPath+"/")
 
