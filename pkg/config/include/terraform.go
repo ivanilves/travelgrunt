@@ -7,5 +7,5 @@ import (
 
 // IsTerraform tells us if we operate on Terraform file(s)
 func IsTerraform(d os.DirEntry) bool {
-	return fileOrSymlink(d) && strings.HasSuffix(d.Name(), ".tf")
+	return FileOrSymlink(d) && strings.HasSuffix(d.Name(), ".tf")
 }

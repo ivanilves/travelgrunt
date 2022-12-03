@@ -27,10 +27,10 @@ func Collect(rootPath string, cfg config.Config) (entries map[string]string, pat
 				return filepath.SkipDir
 			}
 
-			if cfg.IncludeFn(d) {
-				abs := filepath.Dir(path)
-				rel := strings.TrimPrefix(abs, rootPath+"/")
+			abs := filepath.Dir(path)
+			rel := strings.TrimPrefix(abs, rootPath+"/")
 
+			if cfg.Include(d, rel) {
 				entries[rel] = abs
 				paths = append(paths, rel)
 			}

@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 
 	"gopkg.in/yaml.v3"
@@ -11,12 +10,19 @@ import (
 
 var configFile = ".travelgrunt.yml"
 
-// Config contains travelgrunt repo-level configuration
+// Config is a travelgrunt repo-level configuration (a sequentially evaluated list of rules)
 type Config struct {
-	Mode      string `yaml:"mode"`
-	IncludeFn func(os.DirEntry) bool
+	Rules []Rule `yaml:"rules"`
 
 	IsDefault bool
+}
+
+// DefaultConfig returns default travelgrunt repo-level configuration
+func DefaultConfig() Config {
+	return Config{
+		Rules:     []Rule{{IncludeFn: include.IsTerragrunt}},
+		IsDefault: true,
+	}
 }
 
 // NewConfig creates new travelgrunt repo-level configuration
@@ -34,39 +40,26 @@ func NewConfig(path string) (cfg Config, err error) {
 		return cfg, err
 	}
 
-	cfg.IncludeFn, err = GetIncludeFn(cfg.Mode)
+	for idx := range cfg.Rules {
+		cfg.Rules[idx].IncludeFn, err = getIncludeFn(cfg.Rules[idx].Mode)
 
-	return cfg, err
-}
+		if err != nil {
+			cfg.Rules = nil
 
-// DefaultConfig returns default travelgrunt repo-level configuration
-func DefaultConfig() Config {
-	return Config{
-		Mode:      "terragrunt",
-		IncludeFn: include.IsTerragrunt,
-		IsDefault: true,
-	}
-}
-
-// GetIncludeFn gets an "include" func for the given mode (if mode is unknown, it returns a nil func and a non-nil error)
-func GetIncludeFn(mode string) (fn func(os.DirEntry) bool, err error) {
-	err = nil
-
-	switch mode {
-	case "terragrunt":
-		fn = include.IsTerragrunt
-	case "terraform":
-		fn = include.IsTerraform
-	case "terraform_or_terragrunt":
-		fn = include.IsTerraformOrTerragrunt
-	case "dockerfile":
-		fn = include.IsDockerfile
-	case "jenkins":
-		fn = include.IsJenkins
-	default:
-		fn = nil
-		err = fmt.Errorf("illegal mode: %s", mode)
+			return cfg, err
+		}
 	}
 
-	return fn, err
+	return cfg, nil
+}
+
+// Include is a global "decider" function that includes/excludes the path given according to rules
+func (cfg Config) Include(d os.DirEntry, rel string) bool {
+	for idx := range cfg.Rules {
+		if cfg.Rules[idx].Include(d, rel) {
+			return !cfg.Rules[idx].Exclude
+		}
+	}
+
+	return false
 }

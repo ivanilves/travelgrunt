@@ -1,1 +1,2 @@
-mode: terragrunt
+rules:
+- mode: terragrunt

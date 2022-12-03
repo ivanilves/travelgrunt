@@ -15,16 +15,16 @@ const (
 	fixturePath = "../../fixtures/config"
 )
 
-func TestCornerCases(t *testing.T) {
+func TestNewConfigCornerCases(t *testing.T) {
 	assert := assert.New(t)
 
 	testCases := map[string]struct {
 		cfg     Config
 		success bool
 	}{
-		"travelgrunt.yml.invalid":     {cfg: Config{Mode: "", IncludeFn: nil, IsDefault: false}, success: false},
-		"travelgrunt.yml.illegal":     {cfg: Config{Mode: "bogus", IncludeFn: nil, IsDefault: false}, success: false},
-		"travelgrunt.yml.nonexistent": {cfg: Config{Mode: "terragrunt", IncludeFn: include.IsTerragrunt, IsDefault: true}, success: true},
+		"travelgrunt.yml.invalid":     {cfg: Config{Rules: nil, IsDefault: false}, success: false},
+		"travelgrunt.yml.illegal":     {cfg: Config{Rules: nil, IsDefault: false}, success: false},
+		"travelgrunt.yml.nonexistent": {cfg: Config{Rules: []Rule{{Mode: "terragrunt", IncludeFn: include.IsTerragrunt}}, IsDefault: true}, success: true},
 	}
 
 	for cfgFile, expected := range testCases {
@@ -32,34 +32,33 @@ func TestCornerCases(t *testing.T) {
 
 		cfg, err := NewConfig(fixturePath)
 
-		assert.Equal(expected.cfg.Mode, cfg.Mode)
 		assert.Equal(expected.cfg.IsDefault, cfg.IsDefault)
 
 		if expected.success {
-			assert.NotNil(cfg.IncludeFn)
+			assert.NotNil(cfg.Rules)
 			assert.Nil(err)
 		} else {
-			assert.Nil(cfg.IncludeFn)
+			assert.Nil(cfg.Rules)
 			assert.NotNil(err)
 		}
 	}
 }
 
 func getNormalConfig(mode string) Config {
-	includeFn, _ := GetIncludeFn(mode)
+	fn, _ := getIncludeFn(mode)
 
-	return Config{Mode: mode, IncludeFn: includeFn, IsDefault: false}
+	return Config{Rules: []Rule{{Mode: mode, IncludeFn: fn}}, IsDefault: false}
 }
 
-func TestNormalFlow(t *testing.T) {
+func TestNewConfigNormalFlow(t *testing.T) {
 	assert := assert.New(t)
 
 	testCases := map[string]Config{
-		"travelgrunt.yml.terragrunt":              getNormalConfig("terragrunt"),
-		"travelgrunt.yml.terraform":               getNormalConfig("terraform"),
-		"travelgrunt.yml.terraform_or_terragrunt": getNormalConfig("terraform_or_terragrunt"),
-		"travelgrunt.yml.dockerfile":              getNormalConfig("dockerfile"),
-		"travelgrunt.yml.jenkins":                 getNormalConfig("jenkins"),
+		"travelgrunt.yml.terragrunt":  getNormalConfig("terragrunt"),
+		"travelgrunt.yml.terraform":   getNormalConfig("terraform"),
+		"travelgrunt.yml.dockerfile":  getNormalConfig("dockerfile"),
+		"travelgrunt.yml.jenkinsfile": getNormalConfig("jenkinsfile"),
+		"travelgrunt.yml.groovy":      getNormalConfig("groovy"),
 	}
 
 	for cfgFile, expected := range testCases {
@@ -67,12 +66,12 @@ func TestNormalFlow(t *testing.T) {
 
 		cfg, err := NewConfig(fixturePath)
 
-		assert.Equal(expected.Mode, cfg.Mode)
+		assert.NotNil(expected.Rules, cfg.Rules)
 		assert.Equal(expected.IsDefault, false)
 
 		assert.Equalf(
-			runtime.FuncForPC(reflect.ValueOf(expected.IncludeFn).Pointer()).Name(),
-			runtime.FuncForPC(reflect.ValueOf(cfg.IncludeFn).Pointer()).Name(),
+			runtime.FuncForPC(reflect.ValueOf(expected.Rules[0].IncludeFn).Pointer()).Name(),
+			runtime.FuncForPC(reflect.ValueOf(cfg.Rules[0].IncludeFn).Pointer()).Name(),
 			"got unexpected include function while loading config file: %s", configFile,
 		)
 
