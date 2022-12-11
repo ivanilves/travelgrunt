@@ -1,1 +1,2 @@
-mode: bogus
+rules:
+- mode: bogus

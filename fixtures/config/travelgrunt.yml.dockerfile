@@ -1,1 +1,2 @@
-mode: dockerfile
+rules:
+- mode: dockerfile

@@ -1,1 +1,3 @@
-mode: terraform_or_terragrunt
+rules:
+- mode: terraform
+- mode: terragrunt
