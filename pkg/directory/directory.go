@@ -8,8 +8,12 @@ import (
 	"github.com/ivanilves/travelgrunt/pkg/config"
 )
 
-func isHidden(d os.DirEntry) bool {
+func isHiddenDir(d os.DirEntry) bool {
 	return d.IsDir() && string(d.Name()[0]) == "."
+}
+
+func isInScope(abs string, rootPath string) bool {
+	return len(abs) >= len(rootPath)
 }
 
 // Collect gets a list of directory path entries containing file "terragrunt.hcl"
@@ -23,16 +27,23 @@ func Collect(rootPath string, cfg config.Config) (entries map[string]string, pat
 				return err
 			}
 
-			if isHidden(d) {
+			if isHiddenDir(d) {
 				return filepath.SkipDir
 			}
 
 			abs := filepath.Dir(path)
-			rel := strings.TrimPrefix(abs, rootPath+"/")
 
-			if cfg.Include(d, rel) {
-				entries[rel] = abs
-				paths = append(paths, rel)
+			if isInScope(abs, rootPath) {
+				rel := strings.TrimPrefix(abs, rootPath+"/")
+
+				if rel == abs {
+					rel = "."
+				}
+
+				if cfg.Include(d, rel) {
+					entries[rel] = abs
+					paths = append(paths, rel)
+				}
 			}
 
 			return nil

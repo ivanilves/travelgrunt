@@ -14,8 +14,6 @@ type Rule struct {
 	Mode string `yaml:"mode"`
 	// Prefix is a literal path prefix to be matched against the passed file path
 	Prefix string `yaml:"prefix"`
-	// PathEx is a regex to be matched against the passed file full path
-	PathEx string `yaml:"path"`
 	// NameEx is a regex to be matched against the passed file base name
 	NameEx string `yaml:"name"`
 	// Exclude reverses the rule match effect
@@ -27,7 +25,7 @@ type Rule struct {
 
 // Matched matches passed file / dir entry name against supplied expressions (if any)
 func (r Rule) Matched(d os.DirEntry, rel string) bool {
-	return r.pathPrefixed(rel) && r.pathMatched(rel) && r.nameMatched(d)
+	return r.pathPrefixed(rel) && r.nameMatched(d)
 }
 
 func (r Rule) pathPrefixed(path string) bool {
@@ -38,14 +36,20 @@ func (r Rule) pathPrefixed(path string) bool {
 	return true
 }
 
-func (r Rule) pathMatched(path string) bool {
-	if r.PathEx != "" {
-		rx := regexp.MustCompile(r.PathEx)
+func (r Rule) normalizeNameEx() string {
+	rx := regexp.MustCompile(`^\*(\.[[:alnum:]]+)+$`)
 
-		return rx.MatchString(path)
+	if rx.MatchString(r.NameEx) {
+		nameEx := r.NameEx
+
+		nameEx = strings.ReplaceAll(nameEx, ".", "\\.")
+		nameEx = strings.ReplaceAll(nameEx, "*", ".*")
+		nameEx = "^" + nameEx + "$"
+
+		return nameEx
 	}
 
-	return true
+	return r.NameEx
 }
 
 func (r Rule) nameMatched(d os.DirEntry) bool {
@@ -54,7 +58,7 @@ func (r Rule) nameMatched(d os.DirEntry) bool {
 			return false
 		}
 
-		rx := regexp.MustCompile(r.NameEx)
+		rx := regexp.MustCompile(r.normalizeNameEx())
 
 		return rx.MatchString(d.Name())
 	}
