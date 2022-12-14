@@ -3,4 +3,4 @@ rules:
     exclude: true
   - prefix: fixtures/
     exclude: true
-  - name: '^.*\.go$'
+  - name: '*.go'

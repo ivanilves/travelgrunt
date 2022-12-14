@@ -1,4 +1,4 @@
-package include
+package mode
 
 import (
 	"testing"
