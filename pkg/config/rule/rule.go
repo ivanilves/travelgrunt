@@ -1,31 +1,26 @@
-package config
+package rule
 
 import (
 	"os"
 	"regexp"
 	"strings"
 
-	"github.com/ivanilves/travelgrunt/pkg/config/include"
+	"github.com/ivanilves/travelgrunt/pkg/config/mode"
 )
 
-// Rule is a single configuration rule entity (a list of rules is contained by a Config)
+// Rule is a single configuration rule entity (a list of rules is contained by a config.Config)
 type Rule struct {
-	// Mode is a behaviour backed by a function from the `include` package
+	// Mode is a behaviour backed by a function from the `mode` package
 	Mode string `yaml:"mode"`
 	// Prefix is a literal path prefix to be matched against the passed file path
 	Prefix string `yaml:"prefix"`
 	// NameEx is a regex to be matched against the passed file base name
 	NameEx string `yaml:"name"`
-	// Exclude reverses the rule match effect
-	Exclude bool `yaml:"exclude"`
+	// Negate reverses the rule match effect
+	Negate bool `yaml:"negate"`
 
-	// IncludeFn is an `include` package function to invoke on passed file / dir entry
-	IncludeFn func(os.DirEntry) bool
-}
-
-// Matched matches passed file / dir entry name against supplied expressions (if any)
-func (r Rule) Matched(d os.DirEntry, rel string) bool {
-	return r.pathPrefixed(rel) && r.nameMatched(d)
+	// ModeFn is an `mode` package function to invoke on passed file / dir entry
+	ModeFn func(os.DirEntry) bool
 }
 
 func (r Rule) pathPrefixed(path string) bool {
@@ -54,7 +49,7 @@ func (r Rule) normalizeNameEx() string {
 
 func (r Rule) nameMatched(d os.DirEntry) bool {
 	if r.NameEx != "" {
-		if !include.FileOrSymlink(d) {
+		if !mode.FileOrSymlink(d) {
 			return false
 		}
 
@@ -66,11 +61,15 @@ func (r Rule) nameMatched(d os.DirEntry) bool {
 	return true
 }
 
-// Include is a local "decider" function that includes/excludes the path given [on the single rule level]
-func (r Rule) Include(d os.DirEntry, rel string) bool {
-	if r.IncludeFn == nil {
-		return r.Matched(d, rel)
+func (r Rule) match(d os.DirEntry, relPath string) bool {
+	return r.pathPrefixed(relPath) && r.nameMatched(d)
+}
+
+// Admit is a local "decider" function that includes/excludes the path given [on the single rule level]
+func (r Rule) Admit(d os.DirEntry, relPath string) bool {
+	if r.ModeFn == nil {
+		return r.match(d, relPath)
 	}
 
-	return r.IncludeFn(d) && r.Matched(d, rel)
+	return r.ModeFn(d) && r.match(d, relPath)
 }

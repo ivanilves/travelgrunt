@@ -5,14 +5,15 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/ivanilves/travelgrunt/pkg/config/include"
+	"github.com/ivanilves/travelgrunt/pkg/config/mode"
+	"github.com/ivanilves/travelgrunt/pkg/config/rule"
 )
 
 var configFile = ".travelgrunt.yml"
 
 // Config is a travelgrunt repo-level configuration (a sequentially evaluated list of rules)
 type Config struct {
-	Rules []Rule `yaml:"rules"`
+	Rules []rule.Rule `yaml:"rules"`
 
 	IsDefault bool
 }
@@ -20,7 +21,7 @@ type Config struct {
 // DefaultConfig returns default travelgrunt repo-level configuration
 func DefaultConfig() Config {
 	return Config{
-		Rules:     []Rule{{IncludeFn: include.IsTerragrunt}},
+		Rules:     []rule.Rule{{ModeFn: mode.IsTerragrunt}},
 		IsDefault: true,
 	}
 }
@@ -41,7 +42,7 @@ func NewConfig(path string) (cfg Config, err error) {
 	}
 
 	for idx := range cfg.Rules {
-		cfg.Rules[idx].IncludeFn, err = getIncludeFn(cfg.Rules[idx].Mode)
+		cfg.Rules[idx].ModeFn, err = getModeFn(cfg.Rules[idx].Mode)
 
 		if err != nil {
 			cfg.Rules = nil
@@ -53,11 +54,11 @@ func NewConfig(path string) (cfg Config, err error) {
 	return cfg, nil
 }
 
-// Include is a global "decider" function that includes/excludes the path given according to rules
-func (cfg Config) Include(d os.DirEntry, rel string) bool {
+// Admit is a global "decider" function that includes/excludes the path given
+func (cfg Config) Admit(d os.DirEntry, relPath string) bool {
 	for idx := range cfg.Rules {
-		if cfg.Rules[idx].Include(d, rel) {
-			return !cfg.Rules[idx].Exclude
+		if cfg.Rules[idx].Admit(d, relPath) {
+			return !cfg.Rules[idx].Negate
 		}
 	}
 

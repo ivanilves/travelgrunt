@@ -8,7 +8,8 @@ import (
 	"reflect"
 	"runtime"
 
-	"github.com/ivanilves/travelgrunt/pkg/config/include"
+	"github.com/ivanilves/travelgrunt/pkg/config/mode"
+	"github.com/ivanilves/travelgrunt/pkg/config/rule"
 )
 
 const (
@@ -24,7 +25,7 @@ func TestNewConfigCornerCases(t *testing.T) {
 	}{
 		"travelgrunt.yml.invalid":     {cfg: Config{Rules: nil, IsDefault: false}, success: false},
 		"travelgrunt.yml.illegal":     {cfg: Config{Rules: nil, IsDefault: false}, success: false},
-		"travelgrunt.yml.nonexistent": {cfg: Config{Rules: []Rule{{Mode: "terragrunt", IncludeFn: include.IsTerragrunt}}, IsDefault: true}, success: true},
+		"travelgrunt.yml.nonexistent": {cfg: Config{Rules: []rule.Rule{{Mode: "terragrunt", ModeFn: mode.IsTerragrunt}}, IsDefault: true}, success: true},
 	}
 
 	for cfgFile, expected := range testCases {
@@ -45,9 +46,9 @@ func TestNewConfigCornerCases(t *testing.T) {
 }
 
 func getNormalConfig(mode string) Config {
-	fn, _ := getIncludeFn(mode)
+	fn, _ := getModeFn(mode)
 
-	return Config{Rules: []Rule{{Mode: mode, IncludeFn: fn}}, IsDefault: false}
+	return Config{Rules: []rule.Rule{{Mode: mode, ModeFn: fn}}, IsDefault: false}
 }
 
 func TestNewConfigNormalFlow(t *testing.T) {
@@ -70,9 +71,9 @@ func TestNewConfigNormalFlow(t *testing.T) {
 		assert.Equal(expected.IsDefault, false)
 
 		assert.Equalf(
-			runtime.FuncForPC(reflect.ValueOf(expected.Rules[0].IncludeFn).Pointer()).Name(),
-			runtime.FuncForPC(reflect.ValueOf(cfg.Rules[0].IncludeFn).Pointer()).Name(),
-			"got unexpected include function while loading config file: %s", configFile,
+			runtime.FuncForPC(reflect.ValueOf(expected.Rules[0].ModeFn).Pointer()).Name(),
+			runtime.FuncForPC(reflect.ValueOf(cfg.Rules[0].ModeFn).Pointer()).Name(),
+			"got unexpected mode function while loading config file: %s", configFile,
 		)
 
 		assert.Nil(err)

@@ -40,7 +40,7 @@ func Collect(rootPath string, cfg config.Config) (entries map[string]string, pat
 					relPath = "."
 				}
 
-				if cfg.Include(d, relPath) {
+				if cfg.Admit(d, relPath) {
 					entries[relPath] = absPath
 					paths = append(paths, relPath)
 				}

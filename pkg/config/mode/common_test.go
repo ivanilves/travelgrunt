@@ -1,4 +1,4 @@
-package include
+package mode
 
 import (
 	"testing"
@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	fixturePath = "../../../fixtures/config/include"
+	fixturePath = "../../../fixtures/config/mode"
 )
 
 func getFnName(fn func(os.DirEntry) bool) string {
