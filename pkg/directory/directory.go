@@ -12,8 +12,8 @@ func isHiddenDir(d os.DirEntry) bool {
 	return d.IsDir() && string(d.Name()[0]) == "."
 }
 
-func isInScope(abs string, rootPath string) bool {
-	return len(abs) >= len(rootPath)
+func isInScope(absPath string, rootPath string) bool {
+	return len(absPath) >= len(rootPath)
 }
 
 // Collect gets a list of directory path entries containing file "terragrunt.hcl"
@@ -31,18 +31,18 @@ func Collect(rootPath string, cfg config.Config) (entries map[string]string, pat
 				return filepath.SkipDir
 			}
 
-			abs := filepath.Dir(path)
+			absPath := filepath.Dir(path)
 
-			if isInScope(abs, rootPath) {
-				rel := strings.TrimPrefix(abs, rootPath+"/")
+			if isInScope(absPath, rootPath) {
+				relPath := strings.TrimPrefix(absPath, rootPath+"/")
 
-				if rel == abs {
-					rel = "."
+				if relPath == absPath {
+					relPath = "."
 				}
 
-				if cfg.Include(d, rel) {
-					entries[rel] = abs
-					paths = append(paths, rel)
+				if cfg.Include(d, relPath) {
+					entries[relPath] = absPath
+					paths = append(paths, relPath)
 				}
 			}
 
