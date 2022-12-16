@@ -4,38 +4,41 @@
 
 # travelgrunt
 
-Travel **[Terragrunt](https://terragrunt.gruntwork.io/)** or **[Terraform](https://www.terraform.io/)** or ... ANY directory tree as a first class passenger! :airplane:
+Travel **[Terragrunt](https://terragrunt.gruntwork.io/)**, **[Terraform](https://www.terraform.io/)** and ... ANY [Git] repository tree with no stress, as a first class passenger! :airplane:
+
+`travelgrunt` alleviates the pain of hitting endless `cd`/`<TAB>` combos while navigating inside the repo.
 
 ## How to use?
 
-* `cd` to the directory of your [locally cloned] Terragrunt/Terraform Git repo;
+* `cd` to the directory of your [locally cloned] Git repository;
 * run **tg** [alias](#shell-aliases) there :rocket: ([optional] arguments are "path filter" matches);
 * use arrow keys to navigate the list and `/` key to search for specific items;
 
 ## Configuration
-:bulb: `travelgrunt` doesn't need a configuration file, but can take advantage from having one :ok_hand:
+If no configuration file found `travelgrunt` will assume repository having only Terragrunt projects inside!
 
-Create `.travelgrunt.yml` file in the root path of your repository. Set it content to either:
-
-```
-mode: terragrunt
-```
-:arrow_up: this will follow the **default behavior** to travel across Terragrunt projects (you don't even need a config for this!).
+Create `.travelgrunt.yml` file in the root path of your repository. Example config for a random monorepo:
 
 ```
-mode: terraform
+rules:
+  - prefix: vendor/
+    negate: true
+  - prefix: terragrunt/
+    mode: terragrunt
+  - prefix: code/
+    name: '.*\.(go|js|css|html)$'
+  - prefix: config/
+    name: '*.yaml'
 ```
-:arrow_up: this will navigate through Terraform projects/modules instead of Terragrunt ones. Use case: Terraform module [mono]repo.
 
-```
-mode: terraform_or_terragrunt
-```
-:arrow_up: this will navigate through **both** Terraform and Terragrunt projects inside the repo.
+:arrow_up: Config is essentially a list of sequentially applied path matching rules. Each rule can have these fields:
 
-```
-mode: dockerfile
-```
-:arrow_up: with this `travelgrunt` will navigate across Dockerfiles or Dockerfile templates.
+* `prefix` - literal prefix to be matched against relative directory path;
+* `name` - a free form regular expression or a simple glob (`name: '*.go'`) match applied to file name;
+* `mode` - any matching behavior backed by a function from the [`mode`](https://github.com/ivanilves/travelgrunt/tree/main/pkg/config/mode) package;
+* `negate` - boolean directive that reverses the meaning of the match;
+
+:bulb: Even while developing `travelgrunt` itself I use it to navigate [package directories](https://github.com/ivanilves/travelgrunt/blob/main/.travelgrunt.yml) of the application.
 
 ## Shell aliases
 

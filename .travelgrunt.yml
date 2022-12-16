@@ -1,6 +1,6 @@
 rules:
   - prefix: vendor/
-    exclude: true
+    negate: true
   - prefix: fixtures/
-    exclude: true
+    negate: true
   - name: '*.go'
