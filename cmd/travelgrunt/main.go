@@ -98,7 +98,7 @@ func main() {
 	entries, paths, err := directory.Collect(rootPath, cfg)
 
 	if err != nil {
-		log.Fatalf("failed to collect Terragrunt project directories: %s", err.Error())
+		log.Fatalf("failed to collect directories: %s", err.Error())
 	}
 
 	if err := filter.Validate(flag.Args()); err != nil {
