@@ -15,7 +15,7 @@ Travel **[Terragrunt](https://terragrunt.gruntwork.io/)**, **[Terraform](https:/
 * use arrow keys to navigate the list and `/` key to search for specific items;
 
 ## Configuration
-If no configuration file found `travelgrunt` will assume repository having only Terragrunt projects inside!
+:bulb: If no configuration file found `travelgrunt` will assume repository having only Terragrunt projects inside.
 
 Create `.travelgrunt.yml` file in the root path of your repository. Example config for a random monorepo:
 
@@ -34,11 +34,11 @@ rules:
 :arrow_up: Config is essentially a list of sequentially applied path matching rules. Each rule can have these fields:
 
 * `prefix` - literal prefix to be matched against relative directory path;
-* `name` - a free form regular expression or a simple glob (`name: '*.go'`) match applied to file name;
-* `mode` - any matching behavior backed by a function from the [`mode`](https://github.com/ivanilves/travelgrunt/tree/main/pkg/config/mode) package;
-* `negate` - boolean directive that reverses the meaning of the match;
+* `name` - a free form regular expression or a simple glob (`name: '*.go'`) match applied to the file name;
+* `mode` - any matching behavior backed by a [custom logic] function from the [`mode`](https://github.com/ivanilves/travelgrunt/tree/main/pkg/config/mode) package;
+* `negate` - boolean directive that reverses the meaning of the match, excluding the paths matched;
 
-:bulb: Even while developing `travelgrunt` itself I use it to navigate [package directories](https://github.com/ivanilves/travelgrunt/blob/main/.travelgrunt.yml) of the application.
+:bulb: Even while developing `travelgrunt` itself we use it to navigate [package directories](https://github.com/ivanilves/travelgrunt/blob/main/.travelgrunt.yml) of the application :tophat:
 
 ## Shell aliases
 
@@ -47,6 +47,8 @@ It is **absolutely required** to use `bash` (or `zsh`) aliases. Start from somet
 alias tg='_tg(){ travelgrunt -out-file ~/.tg-path ${@} && cd "$(cat ~/.tg-path)" }; _tg'
 alias tt='_tt(){ travelgrunt -top -out-file ~/.tg-path && cd "$(cat ~/.tg-path)" }; _tt'
 ```
+
+These lines are usually added to `~/.bashrc` or `~/.zshrc` file, depending on your system and shell of choice.
 
 :bulb: **tt** is a "convenience alias" that brings you to the top level path of your repository.
 

@@ -19,7 +19,7 @@ builds:
 brews:
 - name: travelgrunt
   homepage: 'https://github.com/ivanilves/travelgrunt'
-  description: 'Travel Terragrunt directory tree as a first class passenger!'
+  description: 'cd inside [mono]repos without fatigue!'
   folder: Formula
   tap:
     owner: ivanilves

@@ -27,7 +27,7 @@ func getSize(itemCount int, size int) int {
 	return size
 }
 
-// Build creates an interactive menu to chose Terragrunt project from
+// Build creates an interactive menu to chose destination directory from
 func Build(items []string, maxSize int, previous string) (selected string, err error) {
 	if len(items) == 0 {
 		return "", fmt.Errorf("no items")
