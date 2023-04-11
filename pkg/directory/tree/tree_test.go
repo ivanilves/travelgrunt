@@ -79,6 +79,22 @@ func TestChildItems(t *testing.T) {
 	assert.Equal(expected, items)
 }
 
+func TestChildItemsTerminalAndWithChildren(t *testing.T) {
+	assert := assert.New(t)
+
+	items := mock.ChildItems(3, "terragrunt/dev/region-1/rds")
+	expected := map[string]string{
+		".":   "terragrunt/dev/region-1/rds",
+		"bar": "terragrunt/dev/region-1/rds/bar",
+		"baz": "terragrunt/dev/region-1/rds/baz",
+		"foo": "terragrunt/dev/region-1/rds/foo",
+	}
+
+	assert.NotNil(items)
+	assert.Equal(4, len(items))
+	assert.Equal(expected, items)
+}
+
 func TestChildNames(t *testing.T) {
 	assert := assert.New(t)
 

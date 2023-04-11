@@ -3,21 +3,17 @@ package tree
 import (
 	"sort"
 	"strings"
+
+	"golang.org/x/exp/slices"
+
+	"github.com/ivanilves/travelgrunt/pkg/directory/tree/node"
 )
 
 // Tree is a hierarchical representation of the directory contents
 type Tree struct {
-	nodes map[string]node
+	nodes map[string]node.Node
 
 	levels []map[string]string
-}
-
-type node struct {
-	name     string
-	path     string
-	parent   string
-	children []string
-	levelID  int
 }
 
 func getLevels(paths []string) (levels []map[string]string) {
@@ -73,20 +69,21 @@ func getNodeChildren(path string, levels []map[string]string, idx int) (children
 	return children
 }
 
-func getNodes(levels []map[string]string) (nodes map[string]node) {
-	nodes = make(map[string]node, 0)
+func getNodes(levels []map[string]string, paths []string) (nodes map[string]node.Node) {
+	nodes = make(map[string]node.Node, 0)
 
 	var prevLevel map[string]string
 
 	for idx, level := range levels {
 		for path, name := range level {
-			nodes[path] = node{
-				name:     name,
-				path:     path,
-				parent:   getNodeParent(path, prevLevel),
-				children: getNodeChildren(path, levels, idx),
-				levelID:  idx,
-			}
+			nodes[path] = node.NewNode(
+				name,
+				path,
+				getNodeParent(path, prevLevel),
+				getNodeChildren(path, levels, idx),
+				idx,
+				slices.Contains(paths, path),
+			)
 		}
 
 		prevLevel = level
@@ -114,7 +111,7 @@ func sortedKeys(items map[string]string) (keys []string) {
 func NewTree(paths []string) Tree {
 	levels := getLevels(paths)
 
-	nodes := getNodes(levels)
+	nodes := getNodes(levels, paths)
 
 	return Tree{nodes: nodes, levels: levels}
 }
@@ -155,8 +152,15 @@ func (t Tree) ChildItems(idx int, parentPath string) (items map[string]string) {
 	items = make(map[string]string, len(t.levels[idx+1]))
 
 	for path, name := range t.levels[idx+1] {
-		if t.nodes[path].parent == parentPath {
+		currentNode := t.nodes[path]
+		parentNode := t.nodes[parentPath]
+
+		if currentNode.IsAChildOf(parentNode) {
 			items[name] = path
+		}
+
+		if parentNode.IsTerminal() && parentNode.HasChildren() {
+			items["."] = parentPath
 		}
 	}
 
