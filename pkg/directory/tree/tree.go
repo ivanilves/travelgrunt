@@ -5,22 +5,15 @@ import (
 	"strings"
 
 	"golang.org/x/exp/slices"
+
+	"github.com/ivanilves/travelgrunt/pkg/directory/tree/node"
 )
 
 // Tree is a hierarchical representation of the directory contents
 type Tree struct {
-	nodes map[string]node
+	nodes map[string]node.Node
 
 	levels []map[string]string
-}
-
-type node struct {
-	name     string
-	path     string
-	parent   string
-	children []string
-	levelID  int
-	terminal bool
 }
 
 func getLevels(paths []string) (levels []map[string]string) {
@@ -76,21 +69,21 @@ func getNodeChildren(path string, levels []map[string]string, idx int) (children
 	return children
 }
 
-func getNodes(levels []map[string]string, paths []string) (nodes map[string]node) {
-	nodes = make(map[string]node, 0)
+func getNodes(levels []map[string]string, paths []string) (nodes map[string]node.Node) {
+	nodes = make(map[string]node.Node, 0)
 
 	var prevLevel map[string]string
 
 	for idx, level := range levels {
 		for path, name := range level {
-			nodes[path] = node{
-				name:     name,
-				path:     path,
-				parent:   getNodeParent(path, prevLevel),
-				children: getNodeChildren(path, levels, idx),
-				levelID:  idx,
-				terminal: slices.Contains(paths, path),
-			}
+			nodes[path] = node.NewNode(
+				name,
+				path,
+				getNodeParent(path, prevLevel),
+				getNodeChildren(path, levels, idx),
+				idx,
+				slices.Contains(paths, path),
+			)
 		}
 
 		prevLevel = level
@@ -160,14 +153,13 @@ func (t Tree) ChildItems(idx int, parentPath string) (items map[string]string) {
 
 	for path, name := range t.levels[idx+1] {
 		currentNode := t.nodes[path]
+		parentNode := t.nodes[parentPath]
 
-		if currentNode.parent == parentPath {
+		if currentNode.IsAChildOf(parentNode) {
 			items[name] = path
 		}
 
-		parentNode := t.nodes[parentPath]
-
-		if parentNode.terminal && parentNode.hasChildren() {
+		if parentNode.IsTerminal() && parentNode.HasChildren() {
 			items["."] = parentPath
 		}
 	}
@@ -189,9 +181,4 @@ func (t Tree) nodeExists(path string) bool {
 	_, defined := t.nodes[path]
 
 	return defined
-}
-
-// hasChildren tells us if that node has child nodes (if node is a parent itself)
-func (n node) hasChildren() bool {
-	return len(n.children) > 0
 }
