@@ -28,13 +28,15 @@ func getSize(itemCount int, size int) int {
 }
 
 // Build creates an interactive menu to chose destination directory from
-func Build(items []string, maxSize int, previous string) (selected string, err error) {
+func Build(items []string, size int, parentID string) (selected string, err error) {
+	var extension string
+
 	if len(items) == 0 {
 		return "", fmt.Errorf("no items")
 	}
 
-	if len(previous) > 0 {
-		fmt.Printf("=> %s\n", previous)
+	if len(parentID) > 0 {
+		extension = fmt.Sprintf(" [from \"%s\"]", parentID)
 	}
 
 	if len(items) == 1 {
@@ -50,9 +52,9 @@ func Build(items []string, maxSize int, previous string) (selected string, err e
 	}
 
 	prompt := promptui.Select{
-		Label:    label,
+		Label:    label + extension,
 		Items:    items,
-		Size:     getSize(len(items), maxSize-Overhead),
+		Size:     getSize(len(items), size-Overhead),
 		Searcher: searcher,
 	}
 

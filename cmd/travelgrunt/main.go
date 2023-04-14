@@ -46,14 +46,14 @@ func buildMenuFromTree(t tree.Tree) string {
 	var selected string
 	var parentID string
 
-	for c := -1; c < t.LevelCount(); c++ {
-		if !t.HasChildren(c, parentID) {
-			selected = parentID
-
-			break
+	for idx := -1; idx < t.LevelCount(); idx++ {
+		if len(parentID) > 0 {
+			if !t.GetNode(parentID).HasChildren() {
+				return parentID
+			}
 		}
 
-		selected, err := menu.Build(t.ChildNames(c, parentID), terminal.Height(), parentID)
+		selected, err := menu.Build(t.LevelChildNames(idx, parentID), terminal.Height(), parentID)
 
 		if err != nil {
 			if err.Error() == "^C" {
@@ -63,7 +63,11 @@ func buildMenuFromTree(t tree.Tree) string {
 			log.Fatalf("failed to build menu: %s", err.Error())
 		}
 
-		parentID = t.ChildItems(c, parentID)[selected]
+		if selected == "." {
+			return parentID
+		}
+
+		parentID = t.LevelChildItems(idx, parentID)[selected]
 	}
 
 	return selected

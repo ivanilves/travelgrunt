@@ -64,14 +64,14 @@ func TestLevelItems(t *testing.T) {
 	assert.Equal("terragrunt", items["terragrunt"])
 }
 
-func TestChildItems(t *testing.T) {
+func TestLevelChildItems(t *testing.T) {
 	assert := assert.New(t)
 
-	assert.Nil(mock.ChildItems(10, "whatever"))
-	assert.Equal(map[string]string{}, mock.ChildItems(4, "terragrunt/prod/region-1/k8s/foo"))
-	assert.Equal(mock.levelItems(0), mock.ChildItems(-1, "ignored-if-minus-one-passed"))
+	assert.Nil(mock.LevelChildItems(10, "whatever"))
+	assert.Equal(map[string]string{}, mock.LevelChildItems(4, "terragrunt/prod/region-1/k8s/foo"))
+	assert.Equal(mock.levelItems(0), mock.LevelChildItems(-1, "ignored-if-minus-one-passed"))
 
-	items := mock.ChildItems(0, "terragrunt")
+	items := mock.LevelChildItems(0, "terragrunt")
 	expected := map[string]string{"dev": "terragrunt/dev", "prod": "terragrunt/prod"}
 
 	assert.NotNil(items)
@@ -79,10 +79,10 @@ func TestChildItems(t *testing.T) {
 	assert.Equal(expected, items)
 }
 
-func TestChildItemsTerminalAndWithChildren(t *testing.T) {
+func TestLevelChildItemsTerminalAndWithChildren(t *testing.T) {
 	assert := assert.New(t)
 
-	items := mock.ChildItems(3, "terragrunt/dev/region-1/rds")
+	items := mock.LevelChildItems(3, "terragrunt/dev/region-1/rds")
 	expected := map[string]string{
 		".":   "terragrunt/dev/region-1/rds",
 		"bar": "terragrunt/dev/region-1/rds/bar",
@@ -95,32 +95,13 @@ func TestChildItemsTerminalAndWithChildren(t *testing.T) {
 	assert.Equal(expected, items)
 }
 
-func TestChildNames(t *testing.T) {
+func TestLevelChildNames(t *testing.T) {
 	assert := assert.New(t)
 
-	items := mock.ChildNames(0, "terragrunt")
+	items := mock.LevelChildNames(0, "terragrunt")
 	expected := []string{"dev", "prod"}
 
 	assert.NotNil(items)
 	assert.Equal(2, len(items))
 	assert.Equal(expected, items)
-}
-
-func TestHasChildren(t *testing.T) {
-	assert := assert.New(t)
-
-	assert.True(mock.HasChildren(-1, ""))
-	assert.True(mock.HasChildren(-1, "whatever"))
-
-	assert.True(mock.nodeExists("terragrunt"))
-	assert.True(mock.HasChildren(0, "terragrunt"))
-
-	assert.True(mock.nodeExists("terragrunt/prod/region-1/k8s"))
-	assert.True(mock.HasChildren(3, "terragrunt/prod/region-1/k8s"))
-
-	assert.False(mock.nodeExists("i-do-not-exist"))
-	assert.False(mock.HasChildren(0, "i-do-not-exist"))
-
-	assert.True(mock.nodeExists("terragrunt/prod/region-1/k8s/foo"))
-	assert.False(mock.HasChildren(4, "terragrunt/prod/region-1/k8s/foo"))
 }
