@@ -1,6 +1,6 @@
 package node
 
-// Node is an element Tree gets composed from (a path with hierarchical and connection metadata)
+// Node is an element Tree gets composed from (a path enriched with hierarchical and connection metadata)
 type Node struct {
 	name     string
 	path     string
@@ -32,7 +32,7 @@ func (n Node) HasChildren() bool {
 	return len(n.children) > 0
 }
 
-// IsTerminal tells us if that node has can be a Tree exit point
+// IsTerminal tells us if that node has can be used as a tree exit point
 func (n Node) IsTerminal() bool {
 	return n.terminal
 }

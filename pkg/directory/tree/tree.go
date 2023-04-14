@@ -135,8 +135,13 @@ func (t Tree) levelItems(idx int) (items map[string]string) {
 	return items
 }
 
-// ChildItems gives us a list of child items for the [parent] node located on the given level ID and the given path
-func (t Tree) ChildItems(idx int, parentPath string) (items map[string]string) {
+// GetNode returns a node record for the given path
+func (t Tree) GetNode(path string) node.Node {
+	return t.nodes[path]
+}
+
+// LevelChildItems gives us a list of child items for the [parent] node located on the given level ID and on the given path
+func (t Tree) LevelChildItems(idx int, parentPath string) (items map[string]string) {
 	if len(t.levels) < idx+1 {
 		return nil
 	}
@@ -152,8 +157,8 @@ func (t Tree) ChildItems(idx int, parentPath string) (items map[string]string) {
 	items = make(map[string]string, len(t.levels[idx+1]))
 
 	for path, name := range t.levels[idx+1] {
-		currentNode := t.nodes[path]
-		parentNode := t.nodes[parentPath]
+		currentNode := t.GetNode(path)
+		parentNode := t.GetNode(parentPath)
 
 		if currentNode.IsAChildOf(parentNode) {
 			items[name] = path
@@ -167,18 +172,7 @@ func (t Tree) ChildItems(idx int, parentPath string) (items map[string]string) {
 	return items
 }
 
-// ChildNames gives us a list of child names for the [parent] node located on the given level ID and the given path
-func (t Tree) ChildNames(idx int, parentPath string) []string {
-	return sortedKeys(t.ChildItems(idx, parentPath))
-}
-
-// HasChildren tells us if a node on the given level ID and the given path has child nodes (if node is a parent itself)
-func (t Tree) HasChildren(idx int, parentPath string) bool {
-	return len(t.ChildItems(idx, parentPath)) > 0
-}
-
-func (t Tree) nodeExists(path string) bool {
-	_, defined := t.nodes[path]
-
-	return defined
+// LevelChildNames gives us a list of child names for the [parent] node located on the given level ID and on the given path
+func (t Tree) LevelChildNames(idx int, parentPath string) []string {
+	return sortedKeys(t.LevelChildItems(idx, parentPath))
 }
