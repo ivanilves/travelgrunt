@@ -57,7 +57,7 @@ func buildMenuFromTree(t tree.Tree) string {
 
 		if err != nil {
 			if err.Error() == "^C" {
-				os.Exit(1)
+				return parentID
 			}
 
 			log.Fatalf("failed to build menu: %s", err.Error())
@@ -71,6 +71,16 @@ func buildMenuFromTree(t tree.Tree) string {
 	}
 
 	return selected
+}
+
+func getEntryPath(entries map[string]string, selected, rootPath string) (path string) {
+	path = entries[selected]
+
+	if path == "" {
+		path = rootPath + "/" + selected
+	}
+
+	return path
 }
 
 func main() {
@@ -114,7 +124,9 @@ func main() {
 	)
 
 	if outFile != "" {
-		writeFileAndExit(outFile, entries[selected])
+		path := getEntryPath(entries, selected, rootPath)
+
+		writeFileAndExit(outFile, path)
 	}
 
 	log.Fatal("Please configure shell aliases as described: https://github.com/ivanilves/travelgrunt#shell-aliases")
