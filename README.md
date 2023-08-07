@@ -59,6 +59,11 @@ Core feature of this program is the ability to change working directory while st
 This **can not** be done by the program itself, because of `POSIX` security limitations. Without instrumenting
 the shell with aliases `travelgrunt` will not work!
 
+### `CTRL+C` / `CTRL+D` behaviour
+When key combinations `CTRL+C` or `CTRL+D` get pressed during the execution, following occures:
+* `CTRL+C` - program terminates with exit code `1`, under the starting directory path;
+* `CTRL+D` - program terminates with exit code `0`, under the directory path currently selected;
+
 ## How to install? :neckbeard:
 
 ### Install with `homebrew`:

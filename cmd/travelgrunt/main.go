@@ -57,6 +57,10 @@ func buildMenuFromTree(t tree.Tree) string {
 
 		if err != nil {
 			if err.Error() == "^C" {
+				os.Exit(1)
+			}
+
+			if err.Error() == "^D" {
 				return parentID
 			}
 
