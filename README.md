@@ -42,14 +42,24 @@ rules:
 
 :bulb: Even while developing `travelgrunt` itself we use it to navigate [package directories](https://github.com/ivanilves/travelgrunt/blob/main/.travelgrunt.yml) of the application :tophat:
 
-## Shell aliases
+## Shell aliases and functions
 
-It is **absolutely required** to use `bash` (or `zsh`) aliases. Start from something like this:
+It is **absolutely required** to use `zsh` aliases or `bash` functions. Start from something like this:
+#### ZSH
 ```
 alias tg='_tg(){ travelgrunt -out-file ~/.tg-path ${@} && cd "$(cat ~/.tg-path)" }; _tg'
 alias tt='_tt(){ travelgrunt -top -out-file ~/.tg-path && cd "$(cat ~/.tg-path)" }; _tt'
 ```
+#### BASH
+```
+function tg() { 
+	travelgrunt -out-file ~/.tg-path ${@} && cd "$(cat ~/.tg-path)" 
+}
 
+function tt() {
+	travelgrunt -top -out-file ~/.tg-path && cd "$(cat ~/.tg-path)"
+}
+```
 These lines are usually added to `~/.bashrc` or `~/.zshrc` file, depending on your system and shell of choice.
 
 :bulb: **tt** is a "convenience alias" that brings you to the top level path of your repository.
