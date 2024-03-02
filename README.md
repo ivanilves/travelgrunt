@@ -42,6 +42,14 @@ rules:
 
 :bulb: Even while developing `travelgrunt` itself we use it to navigate [package directories](https://github.com/ivanilves/travelgrunt/blob/main/.travelgrunt.yml) of the application :tophat:
 
+## Override configured rules with arbitrary expression
+
+You can search by the arbitrary expression instead of configured rules:
+
+```
+tg -x <EXPRESSION> [<match> <match2> ... <matchN>]
+```
+
 ## Shell aliases and functions
 
 It is **absolutely required** to use `zsh` aliases or `bash` functions. Start from something like this:
@@ -52,8 +60,8 @@ alias tt='_tt(){ travelgrunt -top -out-file ~/.tg-path && cd "$(cat ~/.tg-path)"
 ```
 #### BASH
 ```
-function tg() { 
-	travelgrunt -out-file ~/.tg-path ${@} && cd "$(cat ~/.tg-path)" 
+function tg() {
+	travelgrunt -out-file ~/.tg-path ${@} && cd "$(cat ~/.tg-path)"
 }
 
 function tt() {

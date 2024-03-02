@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/ivanilves/travelgrunt/pkg/config"
+	"github.com/ivanilves/travelgrunt/pkg/config/rule"
 	"github.com/ivanilves/travelgrunt/pkg/directory"
 	"github.com/ivanilves/travelgrunt/pkg/directory/tree"
 	"github.com/ivanilves/travelgrunt/pkg/file"
@@ -18,11 +19,13 @@ import (
 var appVersion = "default"
 
 var outFile string
+var expression string
 var top bool
 var version bool
 
 func init() {
 	flag.StringVar(&outFile, "out-file", "", "output selected path into the file specified")
+	flag.StringVar(&expression, "x", "", "use arbitrary expression passed instead of configured rules")
 	flag.BoolVar(&top, "top", false, "get to the repository top level (root) path")
 	flag.BoolVar(&version, "version", false, "print application version and exit")
 }
@@ -111,6 +114,12 @@ func main() {
 
 	if err != nil {
 		log.Fatalf("failed to load travelgrunt config: %s", err.Error())
+	}
+
+	if expression != "" {
+		rules := []rule.Rule{{NameEx: expression}}
+
+		cfg.Rules = rules
 	}
 
 	entries, paths, err := directory.Collect(rootPath, cfg)
