@@ -1,5 +1,5 @@
 APP_NAME    := travelgrunt
-API_VERSION := 0.4
+API_VERSION := 0.5
 BUILD_PATH  := ./cmd/${APP_NAME}
 
 CURRENT_PATCH = $(shell (git fetch --tags && git tag --sort=creatordate | grep -F "v${API_VERSION}." || echo -1) | tail -n1 | sed -r "s/^v([0-9]+\.){2}//")
