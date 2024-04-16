@@ -8,6 +8,8 @@ NEXT_VERSION  = v${API_VERSION}.${NEXT_PATCH}
 
 SHELL := /bin/bash
 
+-include local.mk
+
 default: dep build
 
 all: dep build test install

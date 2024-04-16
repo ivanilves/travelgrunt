@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/ivanilves/travelgrunt/pkg/config"
-	"github.com/ivanilves/travelgrunt/pkg/config/rule"
 	"github.com/ivanilves/travelgrunt/pkg/directory"
 	"github.com/ivanilves/travelgrunt/pkg/directory/tree"
 	"github.com/ivanilves/travelgrunt/pkg/file"
@@ -117,9 +116,7 @@ func main() {
 	}
 
 	if expression != "" {
-		rules := []rule.Rule{{NameEx: expression}}
-
-		cfg.Rules = rules
+		cfg = cfg.WithNameEx(expression)
 	}
 
 	entries, paths, err := directory.Collect(rootPath, cfg)
