@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Set up Go
-      uses: actions/setup-go@v3
+      uses: actions/setup-go@v5
       with:
         go-version: ${{ env.GO_VERSION }}
 
@@ -26,11 +26,11 @@ jobs:
       run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
     - name: Run GoReleaser
-      uses: goreleaser/goreleaser-action@v3
+      uses: goreleaser/goreleaser-action@v6
       with:
         distribution: goreleaser
-        version: latest
-        args: release --rm-dist
+        version: '~> v2'
+        args: release --clean
       env:
         GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}
         TAP_GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}

@@ -1,3 +1,5 @@
+version: 2
+
 before:
   hooks:
   - go mod download
@@ -20,8 +22,8 @@ brews:
 - name: travelgrunt
   homepage: 'https://github.com/ivanilves/travelgrunt'
   description: 'cd inside [mono]repos without fatigue!'
-  folder: Formula
-  tap:
+  directory: Formula
+  repository:
     owner: ivanilves
     name: homebrew-tap
 
@@ -34,7 +36,7 @@ checksum:
   algorithm: sha256
 
 snapshot:
-  name_template: "{{ .Tag }}-snapshot"
+  version_template: "{{ .Tag }}-snapshot"
 
 changelog:
   use: github-native
