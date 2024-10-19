@@ -4,6 +4,9 @@ import (
 	"flag"
 	"log"
 	"os"
+	"strings"
+
+	"github.com/fatih/color"
 
 	"github.com/ivanilves/travelgrunt/pkg/config"
 	"github.com/ivanilves/travelgrunt/pkg/directory"
@@ -89,6 +92,14 @@ func getEntryPath(entries map[string]string, selected, rootPath string) (path st
 	return path
 }
 
+func tag(s string) {
+	sep := strings.Repeat("-", len(s))
+
+	color.Blue(sep)
+	color.HiYellow(s)
+	color.Blue(sep)
+}
+
 func main() {
 	flag.Usage = usage
 	flag.Parse()
@@ -106,6 +117,8 @@ func main() {
 	}
 
 	if top {
+		tag(rootPath)
+
 		writeFileAndExit(outFile, rootPath)
 	}
 
@@ -135,6 +148,8 @@ func main() {
 
 	if outFile != "" {
 		path := getEntryPath(entries, selected, rootPath)
+
+		tag(path)
 
 		writeFileAndExit(outFile, path)
 	}
