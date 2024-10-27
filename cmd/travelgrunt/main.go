@@ -22,12 +22,14 @@ var appVersion = "default"
 
 var outFile string
 var expression string
+var editFile bool
 var top bool
 var version bool
 
 func init() {
 	flag.StringVar(&outFile, "out-file", "", "output selected path into the file specified")
 	flag.StringVar(&expression, "x", "", "use arbitrary expression passed instead of configured rules")
+	flag.BoolVar(&editFile, "e", false, "edit file selected instead of changing working directory")
 	flag.BoolVar(&top, "top", false, "get to the repository top level (root) path")
 	flag.BoolVar(&version, "version", false, "print application version and exit")
 }
@@ -132,6 +134,8 @@ func main() {
 		cfg = cfg.WithNameEx(expression)
 	}
 
+	cfg.UseFiles = editFile
+
 	entries, paths, err := directory.Collect(rootPath, cfg)
 
 	if err != nil {
@@ -149,7 +153,9 @@ func main() {
 	if outFile != "" {
 		path := getEntryPath(entries, selected, rootPath)
 
-		tag(path)
+		if !editFile {
+			tag(path)
+		}
 
 		writeFileAndExit(outFile, path)
 	}
