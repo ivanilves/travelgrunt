@@ -4,7 +4,7 @@
 
 # travelgrunt
 
-Travel **[Terragrunt](https://terragrunt.gruntwork.io/)**, **[Terraform](https://www.terraform.io/)** and ... ANY [Git] repository tree with no stress, as a first class passenger! :airplane:
+Travel **[Terragrunt](https://terragrunt.gruntwork.io/)**, **[Terraform](https://www.terraform.io/)** and ... ANY [Git] repository tree with CLI as a first class passenger! :airplane:
 
 `travelgrunt` alleviates the pain of hitting endless `cd`/`<TAB>` combos while navigating inside the repo.
 
@@ -56,12 +56,17 @@ It is **absolutely required** to use `zsh` aliases or `bash` functions. Start fr
 #### ZSH
 ```
 alias tg='_tg(){ travelgrunt -out-file ~/.tg-path ${@} && cd "$(cat ~/.tg-path)" }; _tg'
+alias te='_te(){ travelgrunt -out-file ~/.tg-path -e ${@} && ${EDITOR} "$(cat ~/.tg-path)" }; _te'
 alias tt='_tt(){ travelgrunt -top -out-file ~/.tg-path && cd "$(cat ~/.tg-path)" }; _tt'
 ```
 #### BASH
 ```
 function tg() {
 	travelgrunt -out-file ~/.tg-path ${@} && cd "$(cat ~/.tg-path)"
+}
+
+function te() {
+	travelgrunt -out-file ~/.tg-path -e ${@} && ${EDITOR} "$(cat ~/.tg-path)"
 }
 
 function tt() {
