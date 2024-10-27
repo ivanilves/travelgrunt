@@ -12,6 +12,14 @@ func isHiddenDir(d os.DirEntry) bool {
 	return d.IsDir() && string(d.Name()[0]) == "."
 }
 
+func getAbsPath(path string, useFiles bool) string {
+	if useFiles {
+		return path
+	}
+
+	return filepath.Dir(path)
+}
+
 func isInScope(absPath string, rootPath string) bool {
 	return len(absPath) >= len(rootPath)
 }
@@ -31,7 +39,7 @@ func Collect(rootPath string, cfg config.Config) (entries map[string]string, pat
 				return filepath.SkipDir
 			}
 
-			absPath := filepath.Dir(path)
+			absPath := getAbsPath(path, cfg.UseFiles)
 
 			if isInScope(absPath, rootPath) {
 				relPath := strings.TrimPrefix(absPath, rootPath+"/")
