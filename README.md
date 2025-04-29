@@ -8,8 +8,6 @@ Travel **[Terragrunt](https://terragrunt.gruntwork.io/)**, **[Terraform](https:/
 
 `travelgrunt` alleviates the pain of hitting endless `cd`/`<TAB>` combos while navigating inside the repo.
 
-:bulb: Video with a brief introduction and a demo is available [here](https://www.youtube.com/watch?v=iqKDJZhfjj4) :movie_camera:
-
 ## How to use?
 
 * `cd` to the directory of your [locally cloned] Git repository;
