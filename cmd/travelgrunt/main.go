@@ -10,6 +10,7 @@ import (
 
 	"github.com/ivanilves/travelgrunt/pkg/config"
 	"github.com/ivanilves/travelgrunt/pkg/directory"
+	"github.com/ivanilves/travelgrunt/pkg/directory/links"
 	"github.com/ivanilves/travelgrunt/pkg/directory/tree"
 	"github.com/ivanilves/travelgrunt/pkg/file"
 	"github.com/ivanilves/travelgrunt/pkg/filter"
@@ -23,6 +24,7 @@ var appVersion = "default"
 var outFile string
 var expression string
 var editFile bool
+var useLinks bool
 var top bool
 var version bool
 
@@ -30,6 +32,7 @@ func init() {
 	flag.StringVar(&outFile, "out-file", "", "output selected path into the file specified")
 	flag.StringVar(&expression, "x", "", "use arbitrary expression passed instead of configured rules")
 	flag.BoolVar(&editFile, "e", false, "edit file selected instead of changing working directory")
+	flag.BoolVar(&useLinks, "l", false, "use static links instead of paths discovered from SCM")
 	flag.BoolVar(&top, "top", false, "get to the repository top level (root) path")
 	flag.BoolVar(&version, "version", false, "print application version and exit")
 }
@@ -49,6 +52,14 @@ func writeFileAndExit(fileName string, data string) {
 	os.Exit(0)
 }
 
+func collect(rootPath string, cfg config.Config) (entries map[string]string, paths []string, err error) {
+	if cfg.UseLinks {
+		return links.Collect(rootPath, cfg.Links)
+	}
+
+	return directory.Collect(rootPath, cfg)
+}
+
 func buildMenuFromTree(t tree.Tree) string {
 	var selected string
 	var parentID string
@@ -59,7 +70,6 @@ func buildMenuFromTree(t tree.Tree) string {
 				return parentID
 			}
 		}
-
 		selected, err := menu.Build(t.LevelChildNames(idx, parentID), terminal.Height(), parentID)
 
 		if err != nil {
@@ -136,7 +146,13 @@ func main() {
 
 	cfg.UseFiles = editFile
 
-	entries, paths, err := directory.Collect(rootPath, cfg)
+	cfg.UseLinks = useLinks
+
+	if cfg.UseFiles && cfg.UseLinks {
+		log.Fatal("either use files to edit or use links to travel outside the repo, never both")
+	}
+
+	entries, paths, err := collect(rootPath, cfg)
 
 	if err != nil {
 		log.Fatalf("failed to collect directories: %s", err.Error())

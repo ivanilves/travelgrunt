@@ -79,3 +79,27 @@ func TestNewConfigNormalFlow(t *testing.T) {
 		assert.Nil(err)
 	}
 }
+
+func TestNewConfigLinksFlow(t *testing.T) {
+	assert := assert.New(t)
+
+	testCases := map[string]bool{
+		"travelgrunt.yml.whatever": false,
+		"travelgrunt.yml.links":    true,
+	}
+
+	for cfgFile, shouldHaveLinks := range testCases {
+		configFile = cfgFile
+
+		cfg, err := NewConfig(fixturePath)
+
+		if shouldHaveLinks {
+			assert.NotEmpty(cfg.Links)
+		} else {
+			assert.Empty(cfg.Links)
+
+		}
+
+		assert.Nil(err)
+	}
+}

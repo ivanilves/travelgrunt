@@ -40,6 +40,27 @@ rules:
 
 :bulb: Even while developing `travelgrunt` itself we use it to navigate [package directories](https://github.com/ivanilves/travelgrunt/blob/main/.travelgrunt.yml) of the application :tophat:
 
+## Links
+Use links feature to be able to travel outside of the repo in a convenient manner.
+
+Add `links` [string list] section to `.travelgrunt.yml` in-repository config file:
+```yaml
+rules:
+  - mode: terragrunt
+links:
+  - /tmp
+  - submodule-path
+  - ~/projects/other-repo
+```
+Invoke links usage by passing `-l` flag to the CLI app:
+```bash
+$ tg -l
+```
+Typical filter rules do apply for the link selection:
+```bash
+$ tg -l other-repo
+```
+
 ## Override configured rules with arbitrary expression
 
 You can search by the arbitrary expression instead of configured rules:
