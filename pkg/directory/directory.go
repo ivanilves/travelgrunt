@@ -36,7 +36,9 @@ func Collect(rootPath string, cfg config.Config) (entries map[string]string, pat
 			}
 
 			if isHiddenDir(d) {
-				return filepath.SkipDir
+				if path != rootPath {
+					return filepath.SkipDir
+				}
 			}
 
 			absPath := getAbsPath(path, cfg.UseFiles)
