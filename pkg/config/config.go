@@ -15,8 +15,11 @@ var configFile = ".travelgrunt.yml"
 type Config struct {
 	Rules []rule.Rule `yaml:"rules"`
 
+	Links []string `yaml:"links"`
+
 	IsDefault bool
 	UseFiles  bool
+	UseLinks  bool
 }
 
 // DefaultConfig returns default travelgrunt repo-level configuration
@@ -25,6 +28,7 @@ func DefaultConfig() Config {
 		Rules:     []rule.Rule{{ModeFn: mode.IsTerragrunt}},
 		IsDefault: true,
 		UseFiles:  false,
+		UseLinks:  false,
 	}
 }
 

@@ -1,0 +1,5 @@
+rules:
+- mode: terragrunt
+links:
+- /tmp
+- build

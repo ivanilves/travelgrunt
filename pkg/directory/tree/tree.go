@@ -123,7 +123,10 @@ func (t Tree) LevelCount() int {
 
 func (t Tree) levelItems(idx int) (items map[string]string) {
 	if len(t.levels) <= idx+1 {
-		return nil
+		// continue on shallow trees with one level only
+		if len(t.levels) > 1 {
+			return nil
+		}
 	}
 
 	items = make(map[string]string, len(t.levels[idx]))
