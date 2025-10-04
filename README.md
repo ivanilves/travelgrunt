@@ -10,9 +10,15 @@ Travel **[Terragrunt](https://terragrunt.gruntwork.io/)**, **[Terraform](https:/
 
 ## How to use?
 
+### Inside a Git repository
 * `cd` to the directory of your [locally cloned] Git repository;
 * run **tg** [alias](#shell-aliases) there :rocket: ([optional] arguments are "path filter" matches);
 * use arrow keys to navigate the list and `/` key to search for specific items;
+
+### As a global bookmarks navigator
+* create `~/.travelgrunt.yml` with your favorite [links](#bookmarks) in your home directory;
+* run **tg** from anywhere to navigate your bookmarked paths;
+* works outside of Git repositories - perfect for jumping between projects!
 
 ## Configuration
 :bulb: If no configuration file found `travelgrunt` will assume repository having only Terragrunt projects inside.
@@ -60,6 +66,34 @@ Typical filter rules do apply for the link selection:
 ```bash
 $ tg -l other-repo
 ```
+
+## Bookmarks
+Use `travelgrunt` as a **global filesystem navigator** with bookmarks!
+
+Create `~/.travelgrunt.yml` in your home directory with your frequently accessed paths:
+```yaml
+links:
+  - ~/projects/work/backend
+  - ~/projects/work/frontend
+  - ~/projects/personal/blog
+  - ~/documents/notes
+  - /var/log
+  - /opt/services
+```
+
+When you run **tg** outside of any Git repository, it will automatically use this global config:
+```bash
+$ tg                # Shows all your bookmarks
+$ tg backend        # Filters bookmarks matching "backend"
+```
+
+:bulb: This is perfect for jumping between different projects or frequently accessed directories **anywhere** on your filesystem!
+
+**Notes:**
+* Global bookmarks work **only outside** Git repositories
+* Inside a repo, `travelgrunt` uses the local `.travelgrunt.yml` config (if present)
+* The `-top` flag requires being inside a Git repository
+* Both absolute paths (`/opt/services`) and tilde-expanded paths (`~/projects`) are supported
 
 ## Override configured rules with arbitrary expression
 

@@ -103,3 +103,67 @@ func TestNewConfigLinksFlow(t *testing.T) {
 		assert.Nil(err)
 	}
 }
+
+func TestNewHomeConfig(t *testing.T) {
+	assert := assert.New(t)
+
+	// Save original configFile
+	originalConfigFile := configFile
+	defer func() { configFile = originalConfigFile }()
+
+	// Test with links fixture
+	configFile = "travelgrunt.yml.links"
+
+	cfg, err := NewHomeConfig(fixturePath)
+
+	assert.Nil(err)
+	assert.Empty(cfg.Rules, "rules should be empty in home config mode")
+	assert.True(cfg.UseLinks, "UseLinks should be true in home config mode")
+	assert.False(cfg.IsDefault, "IsDefault should be false")
+	assert.NotEmpty(cfg.Links, "links should not be empty")
+}
+
+func TestNewHomeConfigNoLinks(t *testing.T) {
+	assert := assert.New(t)
+
+	// Save original configFile
+	originalConfigFile := configFile
+	defer func() { configFile = originalConfigFile }()
+
+	// Test with config that has rules but no links
+	configFile = "travelgrunt.yml.terragrunt"
+
+	_, err := NewHomeConfig(fixturePath)
+	assert.NotNil(err, "should fail when no links found")
+	assert.Contains(err.Error(), "no links found")
+}
+
+func TestNewHomeConfigInvalidYAML(t *testing.T) {
+	assert := assert.New(t)
+
+	// Save original configFile
+	originalConfigFile := configFile
+	defer func() { configFile = originalConfigFile }()
+
+	// Test with invalid YAML
+	configFile = "travelgrunt.yml.invalid"
+
+	_, err := NewHomeConfig(fixturePath)
+	assert.NotNil(err, "should fail with invalid YAML")
+	assert.Contains(err.Error(), "failed to parse")
+}
+
+func TestNewHomeConfigNonexistent(t *testing.T) {
+	assert := assert.New(t)
+
+	// Save original configFile
+	originalConfigFile := configFile
+	defer func() { configFile = originalConfigFile }()
+
+	// Test with nonexistent file
+	configFile = "travelgrunt.yml.doesnotexist"
+
+	_, err := NewHomeConfig(fixturePath)
+	assert.NotNil(err, "should fail when file doesn't exist")
+	assert.Contains(err.Error(), "failed to read")
+}

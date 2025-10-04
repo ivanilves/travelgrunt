@@ -1,7 +1,9 @@
 package config
 
 import (
+	"fmt"
 	"os"
+	"path/filepath"
 
 	"gopkg.in/yaml.v3"
 
@@ -55,6 +57,41 @@ func NewConfig(path string) (cfg Config, err error) {
 
 			return cfg, err
 		}
+	}
+
+	return cfg, nil
+}
+
+// NewHomeConfig loads config from home directory for non-repo mode
+// Only links are loaded, rules are ignored
+// If homePath is empty, os.UserHomeDir() is used
+func NewHomeConfig(homePath string) (Config, error) {
+	if homePath == "" {
+		var err error
+		homePath, err = os.UserHomeDir()
+		if err != nil {
+			return Config{}, fmt.Errorf("failed to get home directory: %w", err)
+		}
+	}
+
+	configPath := filepath.Join(homePath, configFile)
+	data, err := os.ReadFile(configPath)
+	if err != nil {
+		return Config{}, fmt.Errorf("failed to read %s: %w", configPath, err)
+	}
+
+	var cfg Config
+	if err := yaml.Unmarshal(data, &cfg); err != nil {
+		return Config{}, fmt.Errorf("failed to parse %s: %w", configPath, err)
+	}
+
+	// Clear rules, only use links
+	cfg.Rules = []rule.Rule{}
+	cfg.UseLinks = true
+	cfg.IsDefault = false
+
+	if len(cfg.Links) == 0 {
+		return Config{}, fmt.Errorf("no links found in %s", configPath)
 	}
 
 	return cfg, nil
