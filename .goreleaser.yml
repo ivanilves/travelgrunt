@@ -1,9 +1,5 @@
 version: 2
 
-before:
-  hooks:
-  - go mod download
-
 builds:
 - goos:
   - linux
@@ -13,14 +9,13 @@ builds:
   - arm64
   main: ./cmd/travelgrunt/main.go
   ldflags:
-  - -X main.appVersion={{.Env.RELEASE_VERSION}}
+  - -X main.appVersion={{.Version}}
   tags:
   - netgo
   - osusergo
 
 brews:
-- name: travelgrunt
-  homepage: 'https://github.com/ivanilves/travelgrunt'
+- homepage: 'https://github.com/ivanilves/travelgrunt'
   description: 'cd inside [mono]repos without fatigue!'
   directory: Formula
   repository:
@@ -30,13 +25,6 @@ brews:
 archives:
 - name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}"
   format: tar.gz
-
-checksum:
-  name_template: "{{ .ProjectName }}_checksums.txt"
-  algorithm: sha256
-
-snapshot:
-  version_template: "{{ .Tag }}-snapshot"
 
 changelog:
   use: github-native
