@@ -21,3 +21,6 @@ vendor/
 
 # Local Makefile
 local.mk
+
+# Claude Code metadata
+.claude
