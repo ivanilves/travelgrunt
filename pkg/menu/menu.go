@@ -45,8 +45,8 @@ func Build(items []string, size int, parentID string) (selected string, err erro
 
 	searcher := func(input string, index int) bool {
 		item := items[index]
-		name := strings.Replace(strings.ToLower(item), "/", "", -1)
-		input = strings.Replace(strings.ToLower(input), " ", "", -1)
+		name := strings.ReplaceAll(strings.ToLower(item), "/", "")
+		input = strings.ReplaceAll(strings.ToLower(input), " ", "")
 
 		return strings.Contains(name, input)
 	}
