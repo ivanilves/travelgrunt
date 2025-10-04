@@ -123,18 +123,35 @@ func main() {
 	}
 
 	rootPath, err := scm.RootPath()
+	isRepoMode := err == nil
 
-	if err != nil {
-		log.Fatalf("failed to extract top level filesystem path from SCM: %s", err.Error())
+	if !isRepoMode {
+		// Non-repo mode: fallback to home directory
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			log.Fatalf("failed to get home directory: %s", err.Error())
+		}
+		rootPath = homeDir
 	}
 
 	if top {
+		if !isRepoMode {
+			log.Fatal("-top flag requires running inside a git repository")
+		}
 		tag(rootPath)
 
 		writeFileAndExit(outFile, rootPath)
 	}
 
-	cfg, err := config.NewConfig(rootPath)
+	// Load configuration based on mode:
+	// - Repo mode: Load .travelgrunt.yml from repository root
+	// - Non-repo mode: Load .travelgrunt.yml from home directory (links only)
+	var cfg config.Config
+	if isRepoMode {
+		cfg, err = config.NewConfig(rootPath)
+	} else {
+		cfg, err = config.NewHomeConfig("")
+	}
 
 	if err != nil {
 		log.Fatalf("failed to load travelgrunt config: %s", err.Error())
@@ -146,7 +163,10 @@ func main() {
 
 	cfg.UseFiles = editFile
 
-	cfg.UseLinks = useLinks
+	// In non-repo mode, links are already forced by NewHomeConfig()
+	if isRepoMode {
+		cfg.UseLinks = useLinks
+	}
 
 	if cfg.UseFiles && cfg.UseLinks {
 		log.Fatal("either use files to edit or use links to travel outside the repo, never both")
