@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
     - uses: actions/checkout@v5
 
@@ -19,12 +21,15 @@ jobs:
       uses: actions/setup-go@v6
       with:
         go-version: ${{ env.GO_VERSION }}
+        cache: true
 
     - name: Build
       run: make build
 
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
     - uses: actions/checkout@v5
 
@@ -32,15 +37,20 @@ jobs:
       uses: actions/setup-go@v6
       with:
         go-version: ${{ env.GO_VERSION }}
+        cache: true
 
     - name: Test
       run: make test
 
   semantic_commit_check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: github.event_name == 'pull_request'
     steps:
     - uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
 
     - name: Get "base" and "PR" Git branches
       run: git remote update && git checkout ${GITHUB_BASE_REF} && git checkout ${GITHUB_HEAD_REF}
@@ -50,18 +60,19 @@ jobs:
 
   static_analysis:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: github.event_name == 'pull_request'
     steps:
     - uses: actions/checkout@v5
-
-    - name: staticcheck
-      uses: dominikh/staticcheck-action@v1.4.0
 
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v8
 
   codecov:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
     - uses: actions/checkout@v5
 
@@ -69,6 +80,7 @@ jobs:
       uses: actions/setup-go@v6
       with:
         go-version: ${{ env.GO_VERSION }}
+        cache: true
 
     - name: Run coverage
       run: make coverage
